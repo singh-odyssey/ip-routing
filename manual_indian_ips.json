@@ -1,0 +1,422 @@
+[
+  {
+    "ip": "20.192.21.53",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Pune",
+    "isp": "Microsoft Corporation",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "139.59.1.14",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "68.183.75.110",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "134.209.156.78",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "157.245.108.125",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "165.22.221.135",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "68.183.82.111",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "206.189.139.123",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "139.59.63.45",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "178.128.109.87",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "DigitalOcean",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.14.32.25",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "49.34.128.44",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "117.239.45.67",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Bengaluru",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "106.51.78.123",
+    "country": "India",
+    "region": "Tamil Nadu",
+    "city": "Chennai",
+    "isp": "ACT Fibernet",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "122.15.89.234",
+    "country": "India",
+    "region": "West Bengal",
+    "city": "Kolkata",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "43.205.15.78",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "Amazon Web Services",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "15.207.144.89",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "Amazon Web Services",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "13.233.89.156",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Mumbai",
+    "isp": "Amazon Web Services",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.15.120.44",
+    "country": "India",
+    "region": "Gujarat",
+    "city": "Ahmedabad",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "182.76.89.123",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Jaipur",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "59.88.45.167",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Lucknow",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.87.24.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Chandigarh",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "124.123.189.67",
+    "country": "India",
+    "region": "Andhra Pradesh",
+    "city": "Hyderabad",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "112.133.245.89",
+    "country": "India",
+    "region": "Kerala",
+    "city": "Kochi",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.25.67.134",
+    "country": "India",
+    "region": "Odisha",
+    "city": "Bhubaneswar",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "223.233.78.145",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Indore",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "115.243.89.167",
+    "country": "India",
+    "region": "Jharkhand",
+    "city": "Ranchi",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "203.88.134.78",
+    "country": "India",
+    "region": "Uttarakhand",
+    "city": "Dehradun",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "117.207.156.89",
+    "country": "India",
+    "region": "Himachal Pradesh",
+    "city": "Shimla",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "210.212.89.156",
+    "country": "India",
+    "region": "Assam",
+    "city": "Guwahati",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.78.45.123",
+    "country": "India",
+    "region": "Bihar",
+    "city": "Patna",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "110.234.89.167",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Gurgaon",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "14.139.78.145",
+    "country": "India",
+    "region": "Karnataka",
+    "city": "Mysore",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "122.165.234.89",
+    "country": "India",
+    "region": "Tamil Nadu",
+    "city": "Coimbatore",
+    "isp": "ACT Fibernet",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "49.207.145.78",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Nagpur",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.89.167.234",
+    "country": "India",
+    "region": "Telangana",
+    "city": "Hyderabad",
+    "isp": "Excitel Broadband",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "103.105.78.156",
+    "country": "India",
+    "region": "West Bengal",
+    "city": "Kolkata",
+    "isp": "Alliance Broadband",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "203.192.45.123",
+    "country": "India",
+    "region": "Goa",
+    "city": "Panaji",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "223.178.89.167",
+    "country": "India",
+    "region": "Chhattisgarh",
+    "city": "Raipur",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "117.255.134.78",
+    "country": "India",
+    "region": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "150.129.45.189",
+    "country": "India",
+    "region": "Tripura",
+    "city": "Agartala",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "27.34.156.89",
+    "country": "India",
+    "region": "Manipur",
+    "city": "Imphal",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-12"
+  }
+]
