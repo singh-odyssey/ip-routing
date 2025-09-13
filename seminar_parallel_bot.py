@@ -29,13 +29,45 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock, Semaphore, Event
 import sys
+from urllib.parse import urlparse
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+def validate_url(url):
+    """Validate if the provided URL is properly formatted"""
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
+
+def get_user_url():
+    """Get and validate URL from user input"""
+    while True:
+        print("\n🌐 ENTER TARGET URL")
+        print("=" * 30)
+        url = input("🔗 Enter the URL you want to generate views for: ").strip()
+        
+        if not url:
+            print("❌ URL cannot be empty. Please try again.")
+            continue
+            
+        # Add protocol if missing
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+            print(f"💡 Added HTTPS protocol: {url}")
+        
+        if validate_url(url):
+            print(f"✅ Valid URL: {url}")
+            return url
+        else:
+            print("❌ Invalid URL format. Please enter a valid URL.")
+            print("💡 Example: https://example.com/page")
+
 class SeminarParallelBot:
-    def __init__(self, max_students=100):
+    def __init__(self, max_students=100, target_url=None):
         print(f"🎓 SEMINAR PARALLEL BOT - GOOGLE STUDENT AMBASSADOR")
         print(f"👥 Simulating {max_students} students scanning QR code simultaneously")
         print("=" * 70)
@@ -54,8 +86,8 @@ class SeminarParallelBot:
         self.running = False
         self.start_event = Event()
         
-        # Bot configuration
-        self.target_url = "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
+        # Bot configuration - can be provided during initialization or use default
+        self.target_url = target_url or "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
         
         # India timezone
         self.india_tz = pytz.timezone('Asia/Kolkata')
@@ -350,15 +382,18 @@ class SeminarParallelBot:
         self.running = False
 
 def main():
-    """Main function for seminar simulation"""
+    """Main function for seminar simulation with user input"""
     print("🎓 SEMINAR PARALLEL BOT - GOOGLE STUDENT AMBASSADOR")
     print("=" * 65)
     print("👨‍🏫 Simulate students scanning QR code during presentation")
     print("📱 Perfect for realistic bulk unique view generation")
     print()
     
+    # Get target URL from user
+    target_url = get_user_url()
+    
     # Get seminar size
-    print("📊 SEMINAR CONFIGURATION:")
+    print("\n📊 SEMINAR CONFIGURATION:")
     print("1. 🏫 Small seminar (50 students)")
     print("2. 🎓 Medium seminar (100 students)")
     print("3. 🏛️ Large seminar (200 students)")
@@ -388,14 +423,15 @@ def main():
         num_students = 100
     
     print(f"\n🎓 SEMINAR SETUP:")
+    print(f"   Target URL: {target_url}")
     print(f"   Students: {num_students}")
     print(f"   Scenario: Google Student Ambassador presentation")
     print(f"   Action: All students scan QR code simultaneously")
     print(f"   Expected time: ~{max(3, num_students // 50)} seconds")
     print()
     
-    # Create and run seminar bot
-    bot = SeminarParallelBot(max_students=num_students)
+    # Create and run seminar bot with user-provided URL
+    bot = SeminarParallelBot(max_students=num_students, target_url=target_url)
     
     try:
         bot.simulate_seminar_qr_scanning(num_students)
@@ -403,7 +439,7 @@ def main():
         bot.stop()
     
     print(f"\n🎉 Seminar simulation completed!")
-    print(f"📈 Your Google Student Ambassador unique views have been generated!")
+    print(f"📈 Your unique views have been generated successfully!")
 
 if __name__ == "__main__":
     main()
