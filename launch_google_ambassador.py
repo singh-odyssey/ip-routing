@@ -3,10 +3,16 @@
 SIMPLE LAUNCHER FOR GOOGLE STUDENT AMBASSADOR TASK
 ==================================================
 
-Quick launcher script for generating unique views on:
-https://aiskillshouse.com/student/qr-mediator.html?uid=2827&promptId=6
+Quick launcher script for generating unique views on any URL.
+Just run this script and it will ask for:
+1. Target URL
+2. Number of views
 
-Just run this script and it will start generating unique views!
+Features:
+- User-friendly URL and view count input
+- URL validation with auto-protocol addition
+- 42+ Indian IP addresses from 25+ cities
+- Anti-detection measures
 """
 
 import sys
@@ -18,23 +24,20 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 def main():
     print("🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER GENERATOR")
     print("=" * 65)
-    print("🎯 Target: https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6")
     print("⚡ Features: 42+ Indian IPs, 2-5 sec timing, Anti-detection")
+    print("🌐 Works with any URL - just enter it when prompted!")
     print()
     
     try:
         # Import and run the Google Ambassador Bot
-        from google_ambassador_bot import GoogleAmbassadorBot
+        from google_ambassador_bot import main as run_bot
         
-        print("🚀 Initializing bot...")
-        bot = GoogleAmbassadorBot()
-        
-        print("✅ Bot ready! Starting unique view generation...")
+        print("🚀 Launching interactive bot...")
         print("💡 Press Ctrl+C to stop anytime")
         print()
         
-        # Run unlimited views (user can stop with Ctrl+C)
-        bot.run_continuous_unique_views()
+        # Run the main bot function which handles user input
+        run_bot()
         
     except KeyboardInterrupt:
         print(f"\n⏹️ Bot stopped by user")

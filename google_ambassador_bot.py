@@ -26,13 +26,67 @@ from datetime import datetime
 from smart_indian_simulator import SmartIndianIPSimulator
 import pytz
 import logging
+from urllib.parse import urlparse
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+def validate_url(url):
+    """Validate if the provided URL is properly formatted"""
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except:
+        return False
+
+def get_user_url():
+    """Get and validate URL from user input"""
+    while True:
+        print("\n🌐 ENTER TARGET URL")
+        print("=" * 30)
+        url = input("🔗 Enter the URL you want to generate views for: ").strip()
+        
+        if not url:
+            print("❌ URL cannot be empty. Please try again.")
+            continue
+            
+        # Add protocol if missing
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+            print(f"💡 Added HTTPS protocol: {url}")
+        
+        if validate_url(url):
+            print(f"✅ Valid URL: {url}")
+            return url
+        else:
+            print("❌ Invalid URL format. Please enter a valid URL.")
+            print("💡 Example: https://example.com/page")
+
+def get_user_views():
+    """Get target number of views from user input"""
+    while True:
+        print("\n🔢 ENTER NUMBER OF VIEWS")
+        print("=" * 30)
+        views_input = input("🎯 How many unique views do you want? (or 'unlimited'): ").strip().lower()
+        
+        if views_input in ['unlimited', 'infinite', 'continuous', '']:
+            print("✅ Selected: Unlimited views")
+            return None
+        else:
+            try:
+                target_views = int(views_input)
+                if target_views > 0:
+                    print(f"✅ Selected: {target_views} views")
+                    return target_views
+                else:
+                    print("❌ Please enter a positive number")
+            except ValueError:
+                print("❌ Please enter a number or 'unlimited'")
+                print("💡 Examples: 10, 50, 100, unlimited")
+
 class GoogleAmbassadorBot:
-    def __init__(self):
+    def __init__(self, target_url=None):
         print("🎯 Initializing Google Student Ambassador Bot")
         
         # Initialize the smart IP simulator with expanded database
@@ -45,8 +99,8 @@ class GoogleAmbassadorBot:
         self.error_count = 0
         self.running = False
         
-        # Target URL for Google Student Ambassador task (corrected URL without .html)
-        self.target_url = "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
+        # Target URL - can be provided during initialization or use default
+        self.target_url = target_url or "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
         
         # India timezone
         self.india_tz = pytz.timezone('Asia/Kolkata')
@@ -361,7 +415,7 @@ class GoogleAmbassadorBot:
         self.running = False
 
 def main():
-    """Main function"""
+    """Main function with user input for URL and views"""
     print("🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT")
     print("=" * 60)
     print("✅ Features:")
@@ -373,26 +427,16 @@ def main():
     print("   • Complete anti-detection")
     print()
     
-    # Get target number of views
-    while True:
-        try:
-            views_input = input("🔢 How many unique views to generate? (or 'unlimited'): ").strip().lower()
-            if views_input in ['unlimited', 'infinite', 'continuous', '']:
-                target_views = None
-                break
-            else:
-                target_views = int(views_input)
-                if target_views > 0:
-                    break
-                else:
-                    print("❌ Please enter a positive number")
-        except ValueError:
-            print("❌ Please enter a number or 'unlimited'")
+    # Get target URL from user
+    target_url = get_user_url()
+    
+    # Get target number of views from user
+    target_views = get_user_views()
     
     print(f"\n🚀 CONFIGURATION:")
+    print(f"   Target URL: {target_url}")
     print(f"   Target Views: {'Unlimited' if target_views is None else target_views}")
     print(f"   Speed: 2-5 seconds per view")
-    print(f"   URL: https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6")
     print()
     
     # Countdown
@@ -400,8 +444,8 @@ def main():
         print(f"⏳ Starting in {i}...")
         time.sleep(1)
     
-    # Create and run bot
-    bot = GoogleAmbassadorBot()
+    # Create and run bot with user-provided URL
+    bot = GoogleAmbassadorBot(target_url)
     
     try:
         bot.run_continuous_unique_views(target_views)
