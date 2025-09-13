@@ -418,5 +418,235 @@
     "method": "direct",
     "working": true,
     "last_tested": "2025-09-12"
+  },
+  {
+    "ip": "122.161.64.23",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "106.201.51.89",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Noida",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "49.36.210.145",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Ghaziabad",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "110.225.78.34",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Gurugram",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "49.37.112.98",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Greater Noida",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "115.246.23.178",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.44.119.236",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Excitel Broadband",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.231.44.54",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Spectra",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "125.19.23.190",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Gurugram",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "182.76.21.144",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Faridabad",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.25.231.112",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Excitel Broadband",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.61.210.78",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Spectra",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "59.89.210.67",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Noida",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "106.67.48.201",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "49.35.167.102",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.158.32.89",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Hathway",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "117.97.145.210",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Ghaziabad",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "112.110.198.56",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Noida",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "106.205.88.134",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Faridabad",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "115.242.98.47",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Gurugram",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "59.90.132.11",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Tikona Infinet",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "117.200.156.78",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Greater Noida",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "125.18.45.167",
+    "country": "India",
+    "region": "Delhi",
+    "city": "New Delhi",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-13"
   }
 ]

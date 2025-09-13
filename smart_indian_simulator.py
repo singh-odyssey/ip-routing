@@ -30,6 +30,8 @@ class SmartIndianIPSimulator:
         self.current_session_id = 0
         self.used_sessions = []
         self.load_indian_ip_database()
+        # Preferred NCR city names for slight selection bias
+        self.ncr_cities = {"New Delhi", "Delhi", "Noida", "Greater Noida", "Ghaziabad", "Gurgaon", "Gurugram", "Faridabad"}
         
         # Advanced session variation parameters
         self.indian_user_agents = [
@@ -95,10 +97,23 @@ class SmartIndianIPSimulator:
         ]
         print(f"✅ Created fallback database with {len(self.indian_ips_db)} IPs")
     
+    def _choose_ip_biased_to_ncr(self):
+        """Choose an IP with a slight bias towards Delhi NCR cities if present."""
+        if not self.indian_ips_db:
+            return None
+        ncr_ips = [ip for ip in self.indian_ips_db if ip.get('city') in self.ncr_cities or ip.get('region') in {"Delhi", "NCR"}]
+        # If we have NCR entries, pick from them most of the time, otherwise uniform
+        try:
+            if ncr_ips and random.random() < 0.7:  # 70% chance to choose NCR when available
+                return random.choice(ncr_ips)
+            return random.choice(self.indian_ips_db)
+        except IndexError:
+            return random.choice(self.indian_ips_db)
+
     def create_unique_session_profile(self):
         """Create a completely unique session profile"""
-        # Select random IP from database
-        selected_ip = random.choice(self.indian_ips_db)
+        # Select IP from database with NCR bias
+        selected_ip = self._choose_ip_biased_to_ncr() or random.choice(self.indian_ips_db)
         
         # Create unique session characteristics
         user_agent = random.choice(self.indian_user_agents)

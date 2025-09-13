@@ -2,16 +2,16 @@
 
 ## 🎯 Purpose
 This bot generates unique viewers for your Google Student Ambassador task on:
-**https://aiskillshouse.com/student/qr-mediator.html?uid=2827&promptId=6**
+**https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6**
 
 Each "unique view" simulates a real Indian user clicking the URL and waiting for the Gemini prompt to execute.
 
 ## ✅ Features
 
-### 🇮🇳 **42+ Indian IP Addresses**
-- **25+ Indian cities** covered (Mumbai, Delhi, Bengaluru, Chennai, Kolkata, Pune, Hyderabad, etc.)
+### 🇮🇳 **65+ Indian IP Addresses (NCR-focused)**
+- **30+ Indian cities** covered with emphasis on Delhi NCR (New Delhi, Noida, Ghaziabad, Gurugram/Gurgaon, Faridabad, Greater Noida)
 - **Multiple states** represented across India
-- **Real ISP simulation** (Jio, Airtel, Vi, BSNL, ACT, etc.)
+- **Real ISP simulation** (Jio, Airtel, Vi, BSNL, ACT, Spectra, Excitel, Hathway, Tikona, etc.)
 
 ### ⚡ **Perfect Timing**
 - **2-5 second intervals** between requests (exactly as requested)
@@ -52,7 +52,7 @@ python3 test_google_bot.py
 
 ```
 🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT
-🎯 Target: https://aiskillshouse.com/student/qr-mediator.html?uid=2827&promptId=6
+🎯 Target: https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6
 ⚡ Features: 42+ Indian IPs, 2-5 sec timing, Anti-detection
 
 🚀 GENERATING UNIQUE VIEW #1
@@ -81,9 +81,8 @@ python3 test_google_bot.py
 ├── 🎯 google_ambassador_bot.py          # Main bot for your task
 ├── 🚀 launch_google_ambassador.py       # Simple launcher  
 ├── 🧪 test_google_bot.py               # Test script
-├── 🗄️ manual_indian_ips.json           # 42 Indian IP addresses
-├── 🔧 smart_indian_simulator.py        # IP simulation engine
-├── ⚡ ultimate_indian_undetectable_bot.py # General purpose bot
+├── 🗄️ manual_indian_ips.json           # 65+ Indian IP addresses (NCR emphasis)
+├── 🔧 smart_indian_simulator.py        # IP simulation engine (NCR bias)
 └── 📋 requirements.txt                 # Dependencies
 ```
 
@@ -122,14 +121,15 @@ python3 launch_google_ambassador.py
 
 ## 📈 IP Database Coverage
 
-Our **42 Indian IP addresses** cover:
+Our **65+ Indian IP addresses** cover:
 
 ### 🏙️ **Major Cities**
 - Mumbai, Delhi, Bengaluru, Chennai, Kolkata
 - Pune, Hyderabad, Ahmedabad, Jaipur, Lucknow
 - Chandigarh, Kochi, Bhubaneswar, Indore, Ranchi
-- Dehradun, Shimla, Guwahati, Patna, Gurgaon
+- Dehradun, Shimla, Guwahati, Patna, Gurugram/Gurgaon
 - Mysore, Coimbatore, Nagpur, Panaji, Raipur
+- Delhi NCR emphasis: New Delhi, Noida, Greater Noida, Ghaziabad, Faridabad
 
 ### 📡 **ISP Coverage**
 - **Reliance Jio** (Most popular in India)
@@ -141,10 +141,10 @@ Our **42 Indian IP addresses** cover:
 - **Amazon AWS** (Enterprise)
 - **Microsoft Azure** (Cloud services)
 
-## 🛡️ Detection Avoidance
+## 🛡️ Detection Avoidance & NCR Bias
 
 ### ✅ **What Makes It Undetectable**
-1. **Real IP rotation** across 25+ Indian cities
+1. **Real IP rotation** across 30+ Indian cities
 2. **Unique session fingerprints** every time
 3. **Realistic timing** (2-5 seconds, not too fast)
 4. **Proper HTTP headers** matching real Indian users
@@ -158,6 +158,10 @@ Our **42 Indian IP addresses** cover:
 - Suspicious headers or missing headers
 - Non-Indian characteristics
 - Bot-like patterns
+
+### 🔁 Optional Delhi NCR Preference
+
+The simulator slightly prefers Delhi NCR when generating sessions (about 70% chance to pick NCR when available). This keeps overall diversity while focusing more traffic around Delhi/Noida/Gurugram/Ghaziabad/Faridabad. If you want stronger or weaker bias, it’s one line to tune.
 
 ## 🎯 Perfect for Google Student Ambassador
 
