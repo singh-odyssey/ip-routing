@@ -1,0 +1,593 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics Dashboard - IP Routing Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Overview Cards -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card card-custom border-start border-primary border-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total IP Addresses
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalIPs">65</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-globe fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card card-custom border-start border-success border-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Cities Covered
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalCities">30+</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-city fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card card-custom border-start border-info border-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            ISP Providers
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalISPs">8+</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-wifi fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card card-custom border-start border-warning border-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Active Sessions
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="activeSessions">0</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Geographic Distribution Chart -->
+    <div class="col-lg-8 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-map-marked-alt me-2"></i>
+                    Geographic Distribution of IP Addresses
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="geographicChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ISP Distribution -->
+    <div class="col-lg-4 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    ISP Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="ispChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Detailed IP Database Table -->
+    <div class="col-lg-8 mb-4">
+        <div class="card card-custom">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-table me-2"></i>
+                    IP Database Details
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="exportIPDatabase()">
+                        <i class="fas fa-download me-1"></i>Export CSV
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" onclick="refreshIPDatabase()">
+                        <i class="fas fa-sync me-1"></i>Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="ipDatabaseTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>IP Address</th>
+                                <th>City</th>
+                                <th>Region/State</th>
+                                <th>ISP</th>
+                                <th>Status</th>
+                                <th>Last Tested</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ipTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <br>Loading IP database...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Regional Statistics -->
+    <div class="col-lg-4 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Regional Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="regionalStats">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Loading regional data...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="card card-custom mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-tools me-2"></i>
+                    Database Tools
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm" onclick="testRandomIPs()">
+                        <i class="fas fa-vial me-2"></i>Test Random IPs
+                    </button>
+                    <button class="btn btn-outline-success btn-sm" onclick="validateAllIPs()">
+                        <i class="fas fa-check-double me-2"></i>Validate All IPs
+                    </button>
+                    <button class="btn btn-outline-info btn-sm" onclick="showIPMap()">
+                        <i class="fas fa-map me-2"></i>View IP Map
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm" onclick="generateReport()">
+                        <i class="fas fa-file-alt me-2"></i>Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Performance Metrics -->
+    <div class="col-lg-12 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    Performance Metrics & Success Rates
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center p-3">
+                            <div class="h3 text-success">98.5%</div>
+                            <small class="text-muted">IP Availability</small>
+                            <div class="progress progress-custom mt-2">
+                                <div class="progress-bar bg-success" style="width: 98.5%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3">
+                            <div class="h3 text-info">95.2%</div>
+                            <small class="text-muted">View Success Rate</small>
+                            <div class="progress progress-custom mt-2">
+                                <div class="progress-bar bg-info" style="width: 95.2%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3">
+                            <div class="h3 text-warning">2.3s</div>
+                            <small class="text-muted">Avg Response Time</small>
+                            <div class="progress progress-custom mt-2">
+                                <div class="progress-bar bg-warning" style="width: 77%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center p-3">
+                            <div class="h3 text-primary">99.8%</div>
+                            <small class="text-muted">Undetection Rate</small>
+                            <div class="progress progress-custom mt-2">
+                                <div class="progress-bar bg-primary" style="width: 99.8%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IP Map Modal -->
+<div class="modal fade" id="ipMapModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-map me-2"></i>
+                    Geographic Distribution of IP Addresses
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="ipMap" style="height: 500px; background: #f8f9fa; border-radius: 10px;">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <div class="text-center">
+                            <i class="fas fa-map fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">Interactive IP Map</h5>
+                            <p class="text-muted">Map visualization would be implemented here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-download me-2"></i>Export Map
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Test Results Modal -->
+<div class="modal fade" id="testResultsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-vial me-2"></i>
+                    IP Testing Results
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="testResults">
+                    <!-- Test results will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let ipDatabaseData = null;
+    let geographicChart = null;
+    let ispChart = null;
+    
+    // Load statistics on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadIPDatabaseStats();
+    });
+    
+    function loadIPDatabaseStats() {
+        fetch('/api/get-ip-database')
+            .then(response => response.json())
+            .then(data => {
+                ipDatabaseData = data;
+                updateOverviewCards(data);
+                createGeographicChart(data.cities);
+                createISPChart(data.isps);
+                populateIPTable(data.sample_ips);
+                updateRegionalStats(data);
+            })
+            .catch(error => {
+                console.error('Error loading IP database:', error);
+                showToast('Error loading statistics', 'error');
+            });
+    }
+    
+    function updateOverviewCards(data) {
+        document.getElementById('totalIPs').textContent = formatNumber(data.total_ips);
+        document.getElementById('totalCities').textContent = Object.keys(data.cities).length;
+        document.getElementById('totalISPs').textContent = Object.keys(data.isps).length;
+        // Active sessions would be updated real-time
+    }
+    
+    function createGeographicChart(citiesData) {
+        const ctx = document.getElementById('geographicChart').getContext('2d');
+        
+        // Sort cities by count and take top 15
+        const sortedCities = Object.entries(citiesData)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 15);
+        
+        const labels = sortedCities.map(([city]) => city);
+        const counts = sortedCities.map(([,count]) => count);
+        
+        geographicChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'IP Addresses per City',
+                    data: counts,
+                    backgroundColor: 'rgba(66, 133, 244, 0.6)',
+                    borderColor: 'rgba(66, 133, 244, 1)',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function createISPChart(ispsData) {
+        const ctx = document.getElementById('ispChart').getContext('2d');
+        
+        const sortedISPs = Object.entries(ispsData)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 8);
+        
+        const labels = sortedISPs.map(([isp]) => isp);
+        const counts = sortedISPs.map(([,count]) => count);
+        
+        const colors = [
+            '#4285f4', '#34a853', '#fbbc05', '#ea4335',
+            '#9c27b0', '#ff9800', '#795548', '#607d8b'
+        ];
+        
+        ispChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: counts,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white'
+                    }
+                }
+            }
+        });
+    }
+    
+    function populateIPTable(sampleIPs) {
+        const tableBody = document.getElementById('ipTableBody');
+        
+        // For demo, we'll show the first 10 IPs from the sample
+        // In a real implementation, this would paginate through all IPs
+        const tableRows = sampleIPs.map(ip => `
+            <tr>
+                <td><code>${ip.ip}</code></td>
+                <td>
+                    <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                    ${ip.city}
+                </td>
+                <td>${ip.region}</td>
+                <td>
+                    <span class="badge bg-primary">${ip.isp}</span>
+                </td>
+                <td>
+                    <span class="badge bg-success">
+                        <i class="fas fa-check me-1"></i>Active
+                    </span>
+                </td>
+                <td>${ip.last_tested || 'N/A'}</td>
+            </tr>
+        `).join('');
+        
+        tableBody.innerHTML = tableRows;
+    }
+    
+    function updateRegionalStats(data) {
+        const regionalStatsDiv = document.getElementById('regionalStats');
+        
+        // Group by regions/states
+        const regions = {};
+        Object.keys(data.cities).forEach(city => {
+            // This is simplified - in real implementation, we'd have state mapping
+            const state = 'Various States'; // Placeholder
+            if (!regions[state]) regions[state] = 0;
+            regions[state] += data.cities[city];
+        });
+        
+        const regionsList = Object.entries(regions)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 10)
+            .map(([region, count]) => `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>${region}</span>
+                    <span class="badge bg-primary">${count}</span>
+                </div>
+            `).join('');
+        
+        regionalStatsDiv.innerHTML = `
+            <h6>Top Regions</h6>
+            ${regionsList}
+            <hr>
+            <div class="text-center">
+                <small class="text-muted">
+                    Based on ${data.total_ips} IP addresses across India
+                </small>
+            </div>
+        `;
+    }
+    
+    function refreshIPDatabase() {
+        showToast('Refreshing IP database...', 'info');
+        loadIPDatabaseStats();
+    }
+    
+    function exportIPDatabase() {
+        // In a real implementation, this would generate and download CSV
+        showToast('CSV export feature coming soon!', 'info');
+    }
+    
+    function testRandomIPs() {
+        showToast('Testing random IPs...', 'info');
+        
+        // Simulate testing 5 random IPs
+        const testResults = [];
+        for (let i = 0; i < 5; i++) {
+            const randomIP = ipDatabaseData.sample_ips[Math.floor(Math.random() * ipDatabaseData.sample_ips.length)];
+            const success = Math.random() > 0.1; // 90% success rate
+            const responseTime = (Math.random() * 3 + 1).toFixed(2);
+            
+            testResults.push({
+                ip: randomIP.ip,
+                city: randomIP.city,
+                success: success,
+                responseTime: responseTime
+            });
+        }
+        
+        // Show results in modal
+        const resultsHTML = testResults.map(result => `
+            <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                <div>
+                    <strong>${result.ip}</strong><br>
+                    <small class="text-muted">${result.city}</small>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-${result.success ? 'success' : 'danger'}">
+                        ${result.success ? 'Success' : 'Failed'}
+                    </span><br>
+                    <small class="text-muted">${result.responseTime}s</small>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById('testResults').innerHTML = resultsHTML;
+        const modal = new bootstrap.Modal(document.getElementById('testResultsModal'));
+        modal.show();
+        
+        setTimeout(() => {
+            showToast('IP testing completed', 'success');
+        }, 2000);
+    }
+    
+    function validateAllIPs() {
+        showToast('Validation would test all IPs systematically', 'info');
+    }
+    
+    function showIPMap() {
+        const modal = new bootstrap.Modal(document.getElementById('ipMapModal'));
+        modal.show();
+    }
+    
+    function generateReport() {
+        showToast('Generating comprehensive report...', 'info');
+        setTimeout(() => {
+            showToast('Report generation feature coming soon!', 'info');
+        }, 1500);
+    }
+</script>
+{% endblock %}

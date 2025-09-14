@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block title %}Google Ambassador Bot - IP Routing Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Configuration Panel -->
+    <div class="col-lg-4 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>
+                    Bot Configuration
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="googleBotForm">
+                    <div class="mb-3">
+                        <label for="targetUrl" class="form-label">
+                            <i class="fas fa-link me-1"></i>Target URL
+                        </label>
+                        <input type="url" class="form-control form-control-custom" id="targetUrl" 
+                               placeholder="https://example.com" required>
+                        <div class="form-text">Enter the URL you want to generate views for</div>
+                        <div class="invalid-feedback" id="urlError"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="targetViews" class="form-label">
+                            <i class="fas fa-eye me-1"></i>Number of Views
+                        </label>
+                        <input type="number" class="form-control form-control-custom" id="targetViews" 
+                               min="1" max="10000" placeholder="Leave empty for unlimited">
+                        <div class="form-text">Leave empty for unlimited views</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-clock me-1"></i>Timing Configuration
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">2-5 seconds</span>
+                            <input type="text" class="form-control" value="Automatic timing" readonly>
+                        </div>
+                        <div class="form-text">Optimal timing for undetectable operation</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="realTimeUpdates" checked>
+                            <label class="form-check-label" for="realTimeUpdates">
+                                Enable real-time updates
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-custom" id="startButton">
+                            <i class="fas fa-play me-2"></i>Start Google Bot
+                        </button>
+                        <button type="button" class="btn btn-warning btn-custom" id="pauseButton" 
+                                style="display: none;" onclick="controlBot('pause')">
+                            <i class="fas fa-pause me-2"></i>Pause Bot
+                        </button>
+                        <button type="button" class="btn btn-info btn-custom" id="resumeButton" 
+                                style="display: none;" onclick="controlBot('resume')">
+                            <i class="fas fa-play me-2"></i>Resume Bot
+                        </button>
+                        <button type="button" class="btn btn-danger btn-custom" id="stopButton" 
+                                style="display: none;" onclick="controlBot('stop')">
+                            <i class="fas fa-stop me-2"></i>Stop Bot
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Current Session Info -->
+        <div class="card card-custom mt-3" id="sessionCard" style="display: none;">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Current Session
+                </h6>
+            </div>
+            <div class="card-body">
+                <div id="sessionInfo">
+                    <!-- Session information will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics Panel -->
+    <div class="col-lg-8 mb-4">
+        <div class="card card-custom">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Real-time Statistics
+                </h5>
+                <div>
+                    <span id="botStatus" class="status-indicator status-idle"></span>
+                    <span id="botStatusText">Idle</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-6 text-success" id="successCount">0</div>
+                            <small class="text-muted">Successful Views</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-6 text-danger" id="failedCount">0</div>
+                            <small class="text-muted">Failed Attempts</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-6 text-info" id="successRate">0%</div>
+                            <small class="text-muted">Success Rate</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <div class="display-6 text-warning" id="currentView">0</div>
+                            <small class="text-muted">Current View</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="mb-3" id="progressContainer" style="display: none;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Progress</span>
+                        <span id="progressText">0 / 0</span>
+                    </div>
+                    <div class="progress progress-custom">
+                        <div class="progress-bar progress-bar-custom" id="progressBar" 
+                             style="width: 0%" role="progressbar"></div>
+                    </div>
+                </div>
+                
+                <!-- IP Diversity -->
+                <div class="row" id="diversityStats" style="display: none;">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h4 text-primary" id="uniqueIPs">0</div>
+                            <small class="text-muted">Unique IPs</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h4 text-success" id="uniqueCities">0</div>
+                            <small class="text-muted">Cities</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h4 text-info" id="uniqueISPs">0</div>
+                            <small class="text-muted">ISPs</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Current Session Details -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Current Indian User
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="currentUserInfo">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-user-clock fa-3x mb-3"></i>
+                        <p>Waiting for bot to start...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Live Activity Log -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>
+                    Live Activity Log
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="clearLogs()">
+                    <i class="fas fa-trash me-1"></i>Clear
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <div class="logs-container" id="activityLogs">
+                    <div class="log-entry log-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        System ready. Configure and start the bot to begin generating unique views.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Waiting Modal -->
+<div class="modal fade" id="waitingModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-5">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5 id="waitingMessage">Preparing to generate unique view...</h5>
+                <p class="text-muted" id="waitingDetails">Please wait while we set up the session</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentSessionId = null;
+    let currentViewNumber = 0;
+    let targetViewsCount = null;
+    let botStartTime = null;
+    
+    // Pre-fill form from URL parameters
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        const views = urlParams.get('views');
+        
+        if (url) {
+            document.getElementById('targetUrl').value = url;
+        }
+        if (views) {
+            document.getElementById('targetViews').value = views;
+        }
+    });
+    
+    // Form submission
+    document.getElementById('googleBotForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        startGoogleBot();
+    });
+    
+    function startGoogleBot() {
+        const url = normalizeUrl(document.getElementById('targetUrl').value);
+        const views = document.getElementById('targetViews').value;
+        
+        // Validate URL
+        if (!isValidUrl(url)) {
+            document.getElementById('targetUrl').classList.add('is-invalid');
+            document.getElementById('urlError').textContent = 'Please enter a valid URL';
+            return;
+        }
+        
+        document.getElementById('targetUrl').classList.remove('is-invalid');
+        
+        // Prepare data
+        const data = {
+            url: url,
+            views: views ? parseInt(views) : null
+        };
+        
+        targetViewsCount = data.views;
+        currentViewNumber = 0;
+        botStartTime = Date.now();
+        
+        // Show waiting modal
+        const waitingModal = new bootstrap.Modal(document.getElementById('waitingModal'));
+        waitingModal.show();
+        
+        // Start bot
+        fetch('/api/start-google-bot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            waitingModal.hide();
+            
+            if (result.success) {
+                currentSessionId = result.session_id;
+                updateUIForRunningBot();
+                addLog('Bot started successfully', 'success');
+                showToast('Google Ambassador Bot started successfully!', 'success');
+            } else {
+                addLog(`Failed to start bot: ${result.error}`, 'error');
+                showToast(`Failed to start bot: ${result.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            waitingModal.hide();
+            addLog(`Error starting bot: ${error}`, 'error');
+            showToast('Error starting bot', 'error');
+        });
+    }
+    
+    function controlBot(action) {
+        if (!currentSessionId) return;
+        
+        fetch('/api/control-bot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                session_id: currentSessionId,
+                action: action
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                addLog(`Bot ${action}ed`, 'info');
+                showToast(`Bot ${action}ed`, 'info');
+                
+                if (action === 'stop') {
+                    updateUIForStoppedBot();
+                } else if (action === 'pause') {
+                    updateUIForPausedBot();
+                } else if (action === 'resume') {
+                    updateUIForRunningBot();
+                }
+            }
+        })
+        .catch(error => {
+            addLog(`Error controlling bot: ${error}`, 'error');
+        });
+    }
+    
+    function updateUIForRunningBot() {
+        // Update status
+        updateStatusIndicator('botStatus', 'running');
+        document.getElementById('botStatusText').textContent = 'Running';
+        
+        // Update buttons
+        document.getElementById('startButton').style.display = 'none';
+        document.getElementById('pauseButton').style.display = 'block';
+        document.getElementById('resumeButton').style.display = 'none';
+        document.getElementById('stopButton').style.display = 'block';
+        
+        // Show progress if target views set
+        if (targetViewsCount) {
+            document.getElementById('progressContainer').style.display = 'block';
+        }
+        
+        // Show session card
+        document.getElementById('sessionCard').style.display = 'block';
+    }
+    
+    function updateUIForPausedBot() {
+        updateStatusIndicator('botStatus', 'paused');
+        document.getElementById('botStatusText').textContent = 'Paused';
+        
+        document.getElementById('pauseButton').style.display = 'none';
+        document.getElementById('resumeButton').style.display = 'block';
+    }
+    
+    function updateUIForStoppedBot() {
+        updateStatusIndicator('botStatus', 'stopped');
+        document.getElementById('botStatusText').textContent = 'Stopped';
+        
+        // Reset buttons
+        document.getElementById('startButton').style.display = 'block';
+        document.getElementById('pauseButton').style.display = 'none';
+        document.getElementById('resumeButton').style.display = 'none';
+        document.getElementById('stopButton').style.display = 'none';
+        
+        currentSessionId = null;
+    }
+    
+    function addLog(message, type = 'info') {
+        const logsContainer = document.getElementById('activityLogs');
+        const timestamp = new Date().toLocaleTimeString();
+        
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' :
+                    type === 'error' ? 'fa-exclamation-triangle' :
+                    type === 'warning' ? 'fa-exclamation-circle' :
+                    'fa-info-circle';
+        
+        logEntry.innerHTML = `
+            <i class="fas ${icon} me-2"></i>
+            [${timestamp}] ${message}
+        `;
+        
+        logsContainer.appendChild(logEntry);
+        scrollLogsToBottom('activityLogs');
+    }
+    
+    function clearLogs() {
+        document.getElementById('activityLogs').innerHTML = '';
+        addLog('Logs cleared', 'info');
+    }
+    
+    // Socket.IO event handlers for Google Bot
+    socket.on('bot_update', function(data) {
+        if (data.session_id !== currentSessionId) return;
+        
+        switch (data.event_type) {
+            case 'bot_started':
+                addLog(`Bot started for ${data.data.target_url}`, 'success');
+                break;
+                
+            case 'new_session':
+                currentViewNumber++;
+                document.getElementById('currentView').textContent = formatNumber(currentViewNumber);
+                
+                // Update current user info
+                const userInfo = document.getElementById('currentUserInfo');
+                userInfo.innerHTML = `
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Location:</strong><br>
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i>
+                            ${data.data.location}
+                        </div>
+                        <div class="col-6">
+                            <strong>ISP:</strong><br>
+                            <i class="fas fa-wifi text-info me-1"></i>
+                            ${data.data.isp}
+                        </div>
+                        <div class="col-6 mt-2">
+                            <strong>Session ID:</strong><br>
+                            <code>${data.data.session_id}</code>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <strong>IP Address:</strong><br>
+                            <code>${data.data.ip}</code>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <strong>User Agent:</strong><br>
+                            <small class="text-muted">${data.data.user_agent}</small>
+                        </div>
+                    </div>
+                `;
+                
+                addLog(`New Indian user: ${data.data.location} (${data.data.isp})`, 'info');
+                break;
+                
+            case 'view_success':
+                document.getElementById('successCount').textContent = formatNumber(data.data.total_success);
+                document.getElementById('failedCount').textContent = formatNumber(data.data.total_failed);
+                addLog('✅ Unique view generated successfully!', 'success');
+                break;
+                
+            case 'view_failed':
+                document.getElementById('successCount').textContent = formatNumber(data.data.total_success);
+                document.getElementById('failedCount').textContent = formatNumber(data.data.total_failed);
+                addLog('❌ Failed to generate view', 'error');
+                break;
+                
+            case 'stats_update':
+                document.getElementById('successRate').textContent = data.data.success_rate + '%';
+                
+                // Update progress if target views set
+                if (targetViewsCount) {
+                    const progress = (data.data.total_attempts / targetViewsCount) * 100;
+                    document.getElementById('progressBar').style.width = Math.min(progress, 100) + '%';
+                    document.getElementById('progressText').textContent = 
+                        `${data.data.total_attempts} / ${formatNumber(targetViewsCount)}`;
+                }
+                break;
+                
+            case 'diversity_update':
+                document.getElementById('diversityStats').style.display = 'block';
+                document.getElementById('uniqueIPs').textContent = data.data.unique_ips;
+                document.getElementById('uniqueCities').textContent = data.data.unique_cities;
+                document.getElementById('uniqueISPs').textContent = data.data.unique_isps;
+                
+                addLog(`Diversity: ${data.data.unique_ips} IPs, ${data.data.unique_cities} cities, ${data.data.unique_isps} ISPs`, 'info');
+                break;
+                
+            case 'waiting':
+                const modal = document.getElementById('waitingModal');
+                if (modal.classList.contains('show')) {
+                    document.getElementById('waitingMessage').textContent = 
+                        `Waiting ${data.data.wait_time}s before next view...`;
+                }
+                break;
+                
+            case 'bot_completed':
+                addLog(`Bot completed! ${data.data.success_count} successful views generated`, 'success');
+                showToast('Bot completed successfully!', 'success');
+                updateUIForStoppedBot();
+                break;
+                
+            case 'bot_error':
+                addLog(`Bot error: ${data.data.error}`, 'error');
+                showToast('Bot encountered an error', 'error');
+                break;
+                
+            case 'bot_paused':
+                addLog('Bot paused', 'warning');
+                break;
+                
+            case 'bot_resumed':
+                addLog('Bot resumed', 'info');
+                break;
+                
+            case 'bot_stopped':
+                addLog('Bot stopped by user', 'warning');
+                updateUIForStoppedBot();
+                break;
+        }
+    });
+</script>
+{% endblock %}

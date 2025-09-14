@@ -1,0 +1,590 @@
+{% extends "base.html" %}
+
+{% block title %}Seminar Parallel Bot - IP Routing Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Configuration Panel -->
+    <div class="col-lg-4 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-users-cog me-2"></i>
+                    Seminar Configuration
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="seminarBotForm">
+                    <div class="mb-3">
+                        <label for="seminarUrl" class="form-label">
+                            <i class="fas fa-link me-1"></i>QR Code Target URL
+                        </label>
+                        <input type="url" class="form-control form-control-custom" id="seminarUrl" 
+                               placeholder="https://example.com" required>
+                        <div class="form-text">URL that students will access when scanning QR code</div>
+                        <div class="invalid-feedback" id="seminarUrlError"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="numStudents" class="form-label">
+                            <i class="fas fa-graduation-cap me-1"></i>Number of Students
+                        </label>
+                        <select class="form-select form-control-custom" id="numStudents">
+                            <option value="25">25 students (Small class)</option>
+                            <option value="50">50 students (Medium class)</option>
+                            <option value="100" selected>100 students (Large seminar)</option>
+                            <option value="150">150 students (Large auditorium)</option>
+                            <option value="200">200 students (Convention hall)</option>
+                            <option value="300">300 students (Mega event)</option>
+                        </select>
+                        <div class="form-text">Simulates students scanning QR code simultaneously</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-clock me-1"></i>Seminar Scenario
+                        </label>
+                        <div class="form-control-custom p-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-presentation text-primary me-2"></i>
+                                <span>Google Student Ambassador presentation</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-qrcode text-success me-2"></i>
+                                <span>QR code displayed on screen</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-mobile-alt text-info me-2"></i>
+                                <span>Students scan simultaneously</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="seminarRealTimeUpdates" checked>
+                            <label class="form-check-label" for="seminarRealTimeUpdates">
+                                Enable real-time student tracking
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-custom" id="startSeminarButton">
+                            <i class="fas fa-play me-2"></i>Start Seminar Simulation
+                        </button>
+                        <button type="button" class="btn btn-danger btn-custom" id="stopSeminarButton" 
+                                style="display: none;" onclick="stopSeminar()">
+                            <i class="fas fa-stop me-2"></i>Stop Seminar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Seminar Info -->
+        <div class="card card-custom mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    How It Works
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="d-flex mb-3">
+                        <div class="bg-primary text-white rounded-circle p-2 me-3">
+                            <i class="fas fa-1"></i>
+                        </div>
+                        <div>
+                            <strong>Presentation Setup</strong><br>
+                            <small class="text-muted">QR code displayed to audience</small>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="bg-success text-white rounded-circle p-2 me-3">
+                            <i class="fas fa-2"></i>
+                        </div>
+                        <div>
+                            <strong>Simultaneous Scanning</strong><br>
+                            <small class="text-muted">All students scan at the same time</small>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="bg-info text-white rounded-circle p-2 me-3">
+                            <i class="fas fa-3"></i>
+                        </div>
+                        <div>
+                            <strong>Unique Views Generated</strong><br>
+                            <small class="text-muted">Each student creates a unique view</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Seminar Progress -->
+    <div class="col-lg-8 mb-4">
+        <div class="card card-custom">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-presentation me-2"></i>
+                    Seminar Progress
+                </h5>
+                <div>
+                    <span id="seminarStatus" class="status-indicator status-idle"></span>
+                    <span id="seminarStatusText">Ready</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Countdown Display -->
+                <div id="countdownDisplay" style="display: none;">
+                    <div class="text-center mb-4">
+                        <h2 class="display-3 text-primary" id="countdownNumber">3</h2>
+                        <p class="lead" id="countdownMessage">Preparing for QR code scanning...</p>
+                    </div>
+                </div>
+                
+                <!-- Statistics Display -->
+                <div id="statsDisplay">
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="display-6 text-success" id="studentsScanned">0</div>
+                                <small class="text-muted">Students Scanned</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="display-6 text-info" id="totalStudents">0</div>
+                                <small class="text-muted">Total Students</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="display-6 text-warning" id="scanningRate">0/s</div>
+                                <small class="text-muted">Scanning Rate</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="display-6 text-primary" id="elapsedTime">0s</div>
+                                <small class="text-muted">Elapsed Time</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mb-4" id="seminarProgressContainer" style="display: none;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Scanning Progress</span>
+                            <span id="seminarProgressText">0 / 0</span>
+                        </div>
+                        <div class="progress progress-custom" style="height: 12px;">
+                            <div class="progress-bar progress-bar-custom" id="seminarProgressBar" 
+                                 style="width: 0%" role="progressbar"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Geographic Distribution -->
+                    <div class="row" id="geographicDistribution" style="display: none;">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h4 text-primary" id="citiesRepresented">0</div>
+                                <small class="text-muted">Cities Represented</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h4 text-success" id="ispsUsed">0</div>
+                                <small class="text-muted">ISPs Used</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="h4 text-info" id="deviceTypes">0</div>
+                                <small class="text-muted">Device Types</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Student Activity Feed -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Student Activity Feed
+                </h5>
+                <span class="badge bg-primary" id="activeStudentsBadge">0 active</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="logs-container" id="studentActivityLogs" style="max-height: 350px;">
+                    <div class="log-entry log-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Seminar ready. Configure and start to begin simulation.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Seminar Analytics -->
+    <div class="col-lg-6 mb-4">
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Seminar Analytics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="analyticsContent">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-chart-line fa-3x mb-3"></i>
+                        <p>Analytics will appear during seminar simulation</p>
+                    </div>
+                </div>
+                
+                <!-- Success Rate Chart -->
+                <div id="successRateChart" style="display: none;">
+                    <canvas id="seminarChart" width="400" height="200"></canvas>
+                </div>
+                
+                <!-- Top Cities -->
+                <div id="topCitiesDisplay" style="display: none;">
+                    <h6 class="mt-3">Top Cities</h6>
+                    <div id="topCitiesList">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Seminar Complete Modal -->
+<div class="modal fade" id="seminarCompleteModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    Seminar Completed Successfully!
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="seminarResults">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="downloadReport()">
+                    <i class="fas fa-download me-2"></i>Download Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentSeminarSessionId = null;
+    let seminarStartTime = null;
+    let totalStudentsCount = 0;
+    let studentsScannedCount = 0;
+    let seminarTimer = null;
+    
+    // Pre-fill form from URL parameters
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        const students = urlParams.get('students');
+        
+        if (url) {
+            document.getElementById('seminarUrl').value = url;
+        }
+        if (students) {
+            document.getElementById('numStudents').value = students;
+        }
+    });
+    
+    // Form submission
+    document.getElementById('seminarBotForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        startSeminarBot();
+    });
+    
+    function startSeminarBot() {
+        const url = normalizeUrl(document.getElementById('seminarUrl').value);
+        const students = parseInt(document.getElementById('numStudents').value);
+        
+        // Validate URL
+        if (!isValidUrl(url)) {
+            document.getElementById('seminarUrl').classList.add('is-invalid');
+            document.getElementById('seminarUrlError').textContent = 'Please enter a valid URL';
+            return;
+        }
+        
+        document.getElementById('seminarUrl').classList.remove('is-invalid');
+        
+        // Prepare data
+        const data = {
+            url: url,
+            students: students
+        };
+        
+        totalStudentsCount = students;
+        studentsScannedCount = 0;
+        seminarStartTime = Date.now();
+        
+        // Update UI
+        document.getElementById('totalStudents').textContent = formatNumber(totalStudentsCount);
+        document.getElementById('seminarProgressContainer').style.display = 'block';
+        
+        // Show countdown
+        showSeminarCountdown();
+        
+        // Start bot
+        fetch('/api/start-seminar-bot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                currentSeminarSessionId = result.session_id;
+                updateUIForRunningSeminar();
+                addStudentLog('Seminar started successfully', 'success');
+                showToast('Seminar simulation started!', 'success');
+            } else {
+                addStudentLog(`Failed to start seminar: ${result.error}`, 'error');
+                showToast(`Failed to start seminar: ${result.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            addStudentLog(`Error starting seminar: ${error}`, 'error');
+            showToast('Error starting seminar', 'error');
+        });
+    }
+    
+    function showSeminarCountdown() {
+        const countdownDisplay = document.getElementById('countdownDisplay');
+        const countdownNumber = document.getElementById('countdownNumber');
+        const countdownMessage = document.getElementById('countdownMessage');
+        
+        countdownDisplay.style.display = 'block';
+        
+        let count = 3;
+        const messages = [
+            "Students preparing to scan QR code...",
+            "Taking out phones and opening cameras...", 
+            "All students ready to scan!"
+        ];
+        
+        const countdown = setInterval(() => {
+            countdownNumber.textContent = count;
+            countdownMessage.textContent = messages[3 - count];
+            
+            if (count <= 0) {
+                clearInterval(countdown);
+                countdownNumber.textContent = "SCAN!";
+                countdownMessage.textContent = "All students scanning QR code now!";
+                
+                setTimeout(() => {
+                    countdownDisplay.style.display = 'none';
+                }, 1500);
+            }
+            count--;
+        }, 1000);
+    }
+    
+    function updateUIForRunningSeminar() {
+        // Update status
+        updateStatusIndicator('seminarStatus', 'running');
+        document.getElementById('seminarStatusText').textContent = 'Running';
+        
+        // Update buttons
+        document.getElementById('startSeminarButton').style.display = 'none';
+        document.getElementById('stopSeminarButton').style.display = 'block';
+        
+        // Start timer
+        seminarTimer = setInterval(updateElapsedTime, 1000);
+        
+        // Show analytics
+        document.getElementById('geographicDistribution').style.display = 'block';
+    }
+    
+    function updateUIForStoppedSeminar() {
+        updateStatusIndicator('seminarStatus', 'stopped');
+        document.getElementById('seminarStatusText').textContent = 'Stopped';
+        
+        // Reset buttons
+        document.getElementById('startSeminarButton').style.display = 'block';
+        document.getElementById('stopSeminarButton').style.display = 'none';
+        
+        // Stop timer
+        if (seminarTimer) {
+            clearInterval(seminarTimer);
+            seminarTimer = null;
+        }
+        
+        currentSeminarSessionId = null;
+    }
+    
+    function updateElapsedTime() {
+        if (seminarStartTime) {
+            const elapsed = Math.floor((Date.now() - seminarStartTime) / 1000);
+            document.getElementById('elapsedTime').textContent = formatTime(elapsed);
+        }
+    }
+    
+    function stopSeminar() {
+        if (!currentSeminarSessionId) return;
+        
+        fetch('/api/control-bot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                session_id: currentSeminarSessionId,
+                action: 'stop'
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                addStudentLog('Seminar stopped by presenter', 'warning');
+                showToast('Seminar stopped', 'warning');
+                updateUIForStoppedSeminar();
+            }
+        })
+        .catch(error => {
+            addStudentLog(`Error stopping seminar: ${error}`, 'error');
+        });
+    }
+    
+    function addStudentLog(message, type = 'info') {
+        const logsContainer = document.getElementById('studentActivityLogs');
+        const timestamp = new Date().toLocaleTimeString();
+        
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' :
+                    type === 'error' ? 'fa-exclamation-triangle' :
+                    type === 'warning' ? 'fa-exclamation-circle' :
+                    'fa-info-circle';
+        
+        logEntry.innerHTML = `
+            <i class="fas ${icon} me-2"></i>
+            [${timestamp}] ${message}
+        `;
+        
+        logsContainer.appendChild(logEntry);
+        scrollLogsToBottom('studentActivityLogs');
+    }
+    
+    function showSeminarResults(data) {
+        const resultsDiv = document.getElementById('seminarResults');
+        
+        resultsDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Seminar Statistics</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Total Students:</strong> ${formatNumber(totalStudentsCount)}</li>
+                        <li><strong>Successful Scans:</strong> ${formatNumber(data.success_count)}</li>
+                        <li><strong>Success Rate:</strong> ${((data.success_count / totalStudentsCount) * 100).toFixed(1)}%</li>
+                        <li><strong>Duration:</strong> ${formatTime((Date.now() - seminarStartTime) / 1000)}</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6>Geographic Distribution</h6>
+                    <ul class="list-unstyled">
+                        <li><strong>Cities:</strong> ${data.unique_cities}</li>
+                        <li><strong>Unique IPs:</strong> ${data.unique_ips}</li>
+                        <li><strong>ISPs:</strong> ${data.unique_isps}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-3">
+                <h6>Top Cities</h6>
+                <div class="row">
+                    ${data.cities_used.slice(0, 6).map(city => 
+                        `<div class="col-md-4"><span class="badge bg-primary">${city}</span></div>`
+                    ).join('')}
+                </div>
+            </div>
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('seminarCompleteModal'));
+        modal.show();
+    }
+    
+    function downloadReport() {
+        // In a real implementation, this would generate and download a report
+        showToast('Report download feature coming soon!', 'info');
+    }
+    
+    // Socket.IO event handlers for Seminar Bot
+    socket.on('seminar_update', function(data) {
+        if (data.session_id !== currentSeminarSessionId) return;
+        
+        switch (data.event_type) {
+            case 'seminar_started':
+                addStudentLog('Seminar QR scanning simulation started', 'success');
+                break;
+                
+            case 'student_scanning':
+                studentsScannedCount++;
+                document.getElementById('studentsScanned').textContent = formatNumber(studentsScannedCount);
+                
+                // Update progress
+                const progress = (studentsScannedCount / totalStudentsCount) * 100;
+                document.getElementById('seminarProgressBar').style.width = progress + '%';
+                document.getElementById('seminarProgressText').textContent = 
+                    `${studentsScannedCount} / ${formatNumber(totalStudentsCount)}`;
+                
+                // Update scanning rate
+                const elapsed = (Date.now() - seminarStartTime) / 1000;
+                const rate = (studentsScannedCount / elapsed).toFixed(1);
+                document.getElementById('scanningRate').textContent = rate + '/s';
+                
+                addStudentLog(`Student ${studentsScannedCount} scanned QR code successfully`, 'success');
+                break;
+                
+            case 'scanning_complete':
+                addStudentLog('All students completed QR code scanning!', 'success');
+                showToast('Seminar simulation completed!', 'success');
+                updateUIForStoppedSeminar();
+                showSeminarResults(data.data);
+                break;
+                
+            case 'geographic_update':
+                document.getElementById('citiesRepresented').textContent = data.data.cities || 0;
+                document.getElementById('ispsUsed').textContent = data.data.isps || 0;
+                break;
+                
+            case 'seminar_error':
+                addStudentLog(`Seminar error: ${data.data.error}`, 'error');
+                showToast('Seminar encountered an error', 'error');
+                break;
+        }
+    });
+</script>
+{% endblock %}

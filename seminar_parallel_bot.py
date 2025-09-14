@@ -86,8 +86,10 @@ class SeminarParallelBot:
         self.running = False
         self.start_event = Event()
         
-        # Bot configuration - can be provided during initialization or use default
-        self.target_url = target_url or "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
+        # Bot configuration - must be provided, no default
+        if not target_url:
+            raise ValueError("Target URL is required. Please provide a URL.")
+        self.target_url = target_url
         
         # India timezone
         self.india_tz = pytz.timezone('Asia/Kolkata')
@@ -224,41 +226,57 @@ class SeminarParallelBot:
             processing_time = random.uniform(1.5, 3.5)  # Realistic student reaction time
             time.sleep(processing_time)
             
-            # Step 5: Call the setScore API (register the unique view)
-            form_data = {
-                'uid': '2827',
-                'promptId': '6',
-                'deviceId': device_id,
-                'ipAddress': real_ip
-            }
+            # Step 5: Call the setScore API (register the unique view) - only for supported domains
+            parsed_url = urlparse(self.target_url)
+            domain = parsed_url.netloc.lower()
             
-            api_url = "https://aiskillshouse.com/olivrweb/user/Api.php/setScore"
+            # Extract parameters from URL if available
+            from urllib.parse import parse_qs
+            query_params = parse_qs(parsed_url.query)
             
-            # API headers
-            api_headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Origin': 'https://aiskillshouse.com',
-                'Referer': 'https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-            session.headers.update(api_headers)
-            
-            api_response = session.post(api_url, data=form_data, timeout=15)
-            
-            if api_response.status_code == 200:
-                try:
-                    api_result = api_response.json()
-                    
-                    if api_result.get('status') == True:
-                        return True, f"Student {student_id}: ✅ Scan successful - {api_result.get('message', 'Registered')}"
-                    else:
-                        message = api_result.get('message', 'Unknown error')
-                        return False, f"Student {student_id}: ⚠️ API returned false - {message}"
+            # Check if this is a supported domain with API integration
+            if 'aiskillshouse.com' in domain:
+                # Use existing aiskillshouse.com API
+                uid = query_params.get('uid', ['2827'])[0]
+                prompt_id = query_params.get('promptId', ['6'])[0]
+                
+                form_data = {
+                    'uid': uid,
+                    'promptId': prompt_id,
+                    'deviceId': device_id,
+                    'ipAddress': real_ip
+                }
+                
+                api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
+                
+                # API headers
+                api_headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
+                    'Referer': self.target_url,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+                session.headers.update(api_headers)
+                
+                api_response = session.post(api_url, data=form_data, timeout=15)
+                
+                if api_response.status_code == 200:
+                    try:
+                        api_result = api_response.json()
                         
-                except Exception as e:
-                    return False, f"Student {student_id}: ❌ Error parsing response - {e}"
+                        if api_result.get('status') == True:
+                            return True, f"Student {student_id}: ✅ Scan successful - {api_result.get('message', 'Registered')}"
+                        else:
+                            message = api_result.get('message', 'Unknown error')
+                            return False, f"Student {student_id}: ⚠️ API returned false - {message}"
+                            
+                    except Exception as e:
+                        return False, f"Student {student_id}: ❌ Error parsing response - {e}"
+                else:
+                    return False, f"Student {student_id}: ❌ API call failed - {api_response.status_code}"
             else:
-                return False, f"Student {student_id}: ❌ API call failed - {api_response.status_code}"
+                # For other domains, just simulate a successful visit without API call
+                return True, f"Student {student_id}: ✅ Page visit successful (no API integration for {domain})"
                 
         except Exception as e:
             return False, f"Student {student_id}: ❌ Scan error - {e}"

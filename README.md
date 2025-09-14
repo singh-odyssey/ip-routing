@@ -1,10 +1,9 @@
 # 🎓 Google Student Ambassador - Unique Viewer Bot
 
 ## 🎯 Purpose
-This bot generates unique viewers for your Google Student Ambassador task on:
-**https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6**
+This bot generates unique viewers for any URL you specify. It was originally designed for Google Student Ambassador tasks but now works with any website.
 
-Each "unique view" simulates a real Indian user clicking the URL and waiting for the Gemini prompt to execute.
+Each "unique view" simulates a real Indian user clicking the URL and browsing the page naturally.
 
 ## ✅ Features
 
@@ -51,8 +50,11 @@ python3 test_google_bot.py
 ## 📊 What You'll See
 
 ```
+## 📊 What You'll See
+
+```
 🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT
-🎯 Target: https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6
+🎯 Target: [Your provided URL]
 ⚡ Features: 42+ Indian IPs, 2-5 sec timing, Anti-detection
 
 🚀 GENERATING UNIQUE VIEW #1
@@ -66,9 +68,10 @@ python3 test_google_bot.py
 
 🔄 Requesting URL...
 📖 Simulating page read time: 1.76s
-✅ Page loaded successfully, found: prompt, ai
-🤖 Waiting for Gemini prompt execution: 2.58s
+✅ Page loaded successfully
+🤖 Processing page content: 2.58s
 ✅ UNIQUE VIEW GENERATED SUCCESSFULLY!
+```
 
 📈 Overall Stats: 1 successful views, 0 failed (100.0% success)
 ⏳ Waiting 3.85 seconds before next unique view...

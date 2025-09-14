@@ -5,3 +5,7 @@ pytz>=2023.3
 urllib3>=2.0.0
 selenium>=4.15.0
 webdriver-manager>=4.0.0
+flask>=2.3.0
+flask-socketio>=5.3.0
+python-socketio>=5.8.0
+speedtest-cli>=2.1.3

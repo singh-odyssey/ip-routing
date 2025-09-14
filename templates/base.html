@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IP Routing Bot - Web UI{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --success-color: #34a853;
+            --warning-color: #fbbc05;
+            --danger-color: #ea4335;
+            --dark-color: #1f1f1f;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 20px;
+        }
+        
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-color), #667eea);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .card-custom {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-custom {
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-control-custom {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-custom:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-running { background-color: var(--success-color); animation: pulse 2s infinite; }
+        .status-paused { background-color: var(--warning-color); }
+        .status-stopped { background-color: var(--danger-color); }
+        .status-idle { background-color: #6c757d; }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 168, 83, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0); }
+        }
+        
+        .progress-custom {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+        }
+        
+        .progress-bar-custom {
+            background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+            border-radius: 10px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .logs-container {
+            background: var(--dark-color);
+            color: #00ff00;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            padding: 5px 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .log-success { color: #00ff00; }
+        .log-error { color: #ff4444; }
+        .log-warning { color: #ffaa00; }
+        .log-info { color: #00aaff; }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 0 15px;
+        }
+        
+        .nav-link-custom {
+            color: white;
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .ip-database-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .country-flag {
+            width: 24px;
+            height: auto;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">
+                        <i class="fas fa-globe-asia me-2"></i>
+                        IP Routing Bot Suite
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="/">
+                                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'google_bot_page' %}active{% endif %}" href="/google-bot">
+                                    <i class="fas fa-robot me-1"></i>Google Ambassador Bot
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'seminar_bot_page' %}active{% endif %}" href="/seminar-bot">
+                                    <i class="fas fa-users me-1"></i>Seminar Bot
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.endpoint == 'stats_page' %}active{% endif %}" href="/stats">
+                                    <i class="fas fa-chart-line me-1"></i>Statistics
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <span class="navbar-text">
+                                    <i class="fas fa-flag me-1"></i>
+                                    <img src="https://flagcdn.com/w20/in.png" alt="India" class="country-flag">
+                                    65+ Indian IPs
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Main Content -->
+            <div class="container-fluid p-4">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="notification-toast" class="toast" role="alert">
+            <div class="toast-header">
+                <i class="fas fa-info-circle text-primary me-2"></i>
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toast-message">
+                <!-- Toast message will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <!-- Chart.js for statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+        
+        // Utility functions
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('notification-toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastHeader = toast.querySelector('.toast-header i');
+            
+            // Update toast content
+            toastMessage.textContent = message;
+            
+            // Update icon based on type
+            toastHeader.className = `fas me-2 ${
+                type === 'success' ? 'fa-check-circle text-success' :
+                type === 'error' ? 'fa-exclamation-triangle text-danger' :
+                type === 'warning' ? 'fa-exclamation-circle text-warning' :
+                'fa-info-circle text-primary'
+            }`;
+            
+            // Show toast
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+        
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            if (hours > 0) {
+                return `${hours}h ${minutes}m ${secs}s`;
+            } else if (minutes > 0) {
+                return `${minutes}m ${secs}s`;
+            } else {
+                return `${secs}s`;
+            }
+        }
+        
+        function updateStatusIndicator(elementId, status) {
+            const indicator = document.getElementById(elementId);
+            if (indicator) {
+                indicator.className = `status-indicator status-${status}`;
+            }
+        }
+        
+        // Socket.IO event handlers
+        socket.on('connect', function() {
+            console.log('Connected to server');
+            showToast('Connected to server', 'success');
+        });
+        
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+            showToast('Disconnected from server', 'warning');
+        });
+        
+        // Auto-scroll logs to bottom
+        function scrollLogsToBottom(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+        
+        // Format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // Validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+        
+        // Add protocol if missing
+        function normalizeUrl(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

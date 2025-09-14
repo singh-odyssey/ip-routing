@@ -3,8 +3,7 @@
 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT
 ==============================================
 
-Specialized bot for generating unique viewers on:
-https://aiskillshouse.com/student/qr-mediator.html?uid=2827&promptId=6
+Specialized bot for generating unique viewers on any provided URL.
 
 Features:
 ✅ Simulates real Indian users clicking the URL
@@ -99,8 +98,10 @@ class GoogleAmbassadorBot:
         self.error_count = 0
         self.running = False
         
-        # Target URL - can be provided during initialization or use default
-        self.target_url = target_url or "https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6"
+        # Target URL - must be provided, no default
+        if not target_url:
+            raise ValueError("Target URL is required. Please provide a URL.")
+        self.target_url = target_url
         
         # India timezone
         self.india_tz = pytz.timezone('Asia/Kolkata')
@@ -256,49 +257,65 @@ class GoogleAmbassadorBot:
             # Step 5: Make the setScore API call (this is what counts the unique view!)
             logger.info(f"🎯 Calling setScore API to register unique view...")
             
-            # Prepare form data
-            form_data = {
-                'uid': '2827',
-                'promptId': '6',
-                'deviceId': device_id,
-                'ipAddress': real_ip
-            }
+            # Parse target URL to make API call dynamic
+            parsed_url = urlparse(self.target_url)
+            domain = parsed_url.netloc.lower()
             
-            # Make the API call
-            api_url = "https://aiskillshouse.com/olivrweb/user/Api.php/setScore"
+            # Extract parameters from URL if available
+            from urllib.parse import parse_qs
+            query_params = parse_qs(parsed_url.query)
             
-            # Add API-specific headers
-            api_headers = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Origin': 'https://aiskillshouse.com',
-                'Referer': 'https://aiskillshouse.com/student/qr-mediator?uid=2827&promptId=6',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-            session.headers.update(api_headers)
-            
-            api_response = session.post(api_url, data=form_data, timeout=15)
-            
-            if api_response.status_code == 200:
-                try:
-                    api_result = api_response.json()
-                    logger.info(f"📊 API Response: {api_result}")
-                    
-                    if api_result.get('status') == True:
-                        logger.info(f"✅ UNIQUE VIEW SUCCESSFULLY REGISTERED!")
-                        if 'deepLink' in api_result:
-                            logger.info(f"🔗 Deep link: {api_result['deepLink']}")
-                        return True
-                    else:
-                        message = api_result.get('message', 'Unknown error')
-                        logger.warning(f"⚠️ API returned false: {message}")
+            # Check if this is a supported domain with API integration
+            if 'aiskillshouse.com' in domain:
+                # Use existing aiskillshouse.com API
+                uid = query_params.get('uid', ['2827'])[0]
+                prompt_id = query_params.get('promptId', ['6'])[0]
+                
+                # Prepare form data
+                form_data = {
+                    'uid': uid,
+                    'promptId': prompt_id,
+                    'deviceId': device_id,
+                    'ipAddress': real_ip
+                }
+                
+                # Make the API call
+                api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
+                
+                # Add API-specific headers
+                api_headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
+                    'Referer': self.target_url,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+                session.headers.update(api_headers)
+                
+                api_response = session.post(api_url, data=form_data, timeout=15)
+                
+                if api_response.status_code == 200:
+                    try:
+                        api_result = api_response.json()
+                        logger.info(f"📊 API Response: {api_result}")
+                        
+                        if api_result.get('status') == True:
+                            logger.info(f"✅ UNIQUE VIEW SUCCESSFULLY REGISTERED!")
+                            if 'deepLink' in api_result:
+                                logger.info(f"🔗 Deep link: {api_result['deepLink']}")
+                            return True
+                        else:
+                            logger.warning(f"⚠️ API returned false: {api_result.get('message', 'Unknown error')}")
+                            return False
+                            
+                    except Exception as e:
+                        logger.error(f"❌ Error parsing API response: {e}")
                         return False
-                except Exception as e:
-                    logger.error(f"❌ Error parsing API response: {e}")
-                    logger.info(f"Raw response: {api_response.text[:200]}...")
+                else:
+                    logger.error(f"❌ API call failed with status: {api_response.status_code}")
                     return False
             else:
-                logger.error(f"❌ API call failed: {api_response.status_code}")
-                return False
+                # For other domains, just simulate a successful visit without API call
+                logger.info(f"✅ PAGE VISIT SUCCESSFUL (no API integration for {domain})")
                 
         except requests.exceptions.Timeout:
             logger.error("❌ Request timeout")
