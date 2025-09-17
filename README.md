@@ -1,16 +1,29 @@
 # 🎓 Google Student Ambassador - Unique Viewer Bot
 
 ## 🎯 Purpose
-This bot generates unique viewers for any URL you specify. It was originally designed for Google Student Ambassador tasks but now works with any website.
+This bot generates unique viewers for any URL you specify. It was originally designed for Google Student Amb### 🔁 Enhanced Regional Coverage
+
+The simulator now includes comprehensive coverage across all Indian regions with special emphasis on North and Central India:
+
+**Coverage Statistics:**
+- **North India:** 60+ IP addresses across Delhi NCR, UP, Punjab, Haryana
+- **Central India:** 25+ IP addresses across MP, Chhattisgarh, Rajasthan  
+- **South India:** 15+ IP addresses across Karnataka, Maharashtra, Tamil Nadu, Kerala, Telangana, Andhra Pradesh
+- **East India:** 5+ IP addresses across West Bengal, Odisha, Jharkhand, Bihar
+- **Northeast:** 3+ IP addresses across Assam, Tripura, Manipur
+- **Others:** Gujarat, J&K, Goa, Uttarakhand, Himachal Pradesh
+
+This provides the most comprehensive Indian IP simulation available, perfect for realistic traffic generation.ador tasks but now works with any website.
 
 Each "unique view" simulates a real Indian user clicking the URL and browsing the page naturally.
 
 ## ✅ Features
 
-### 🇮🇳 **65+ Indian IP Addresses (NCR-focused)**
-- **30+ Indian cities** covered with emphasis on Delhi NCR (New Delhi, Noida, Ghaziabad, Gurugram/Gurgaon, Faridabad, Greater Noida)
-- **Multiple states** represented across India
-- **Real ISP simulation** (Jio, Airtel, Vi, BSNL, ACT, Spectra, Excitel, Hathway, Tikona, etc.)
+### 🇮🇳 **112+ Indian IP Addresses (All Regions)**
+- **50+ Indian cities** covered with comprehensive geographic distribution
+- **All major states** represented across North, Central, South, East, West, and Northeast India
+- **Real ISP simulation** (Jio, Airtel, Vi, BSNL, ACT, Spectra, Excitel, Hathway, Tikona, DigitalOcean, AWS, etc.)
+- **Enhanced coverage** with focus on North and Central India (Delhi NCR, UP, MP, Rajasthan, Punjab, Haryana)
 
 ### ⚡ **Perfect Timing**
 - **2-5 second intervals** between requests (exactly as requested)
@@ -84,7 +97,7 @@ python3 test_google_bot.py
 ├── 🎯 google_ambassador_bot.py          # Main bot for your task
 ├── 🚀 launch_google_ambassador.py       # Simple launcher  
 ├── 🧪 test_google_bot.py               # Test script
-├── 🗄️ manual_indian_ips.json           # 65+ Indian IP addresses (NCR emphasis)
+├── 🗄️ manual_indian_ips.json           # 112+ Indian IP addresses (All regions)
 ├── 🔧 smart_indian_simulator.py        # IP simulation engine (NCR bias)
 └── 📋 requirements.txt                 # Dependencies
 ```
@@ -124,15 +137,24 @@ python3 launch_google_ambassador.py
 
 ## 📈 IP Database Coverage
 
-Our **65+ Indian IP addresses** cover:
+Our **112+ Indian IP addresses** cover:
 
-### 🏙️ **Major Cities**
-- Mumbai, Delhi, Bengaluru, Chennai, Kolkata
-- Pune, Hyderabad, Ahmedabad, Jaipur, Lucknow
-- Chandigarh, Kochi, Bhubaneswar, Indore, Ranchi
-- Dehradun, Shimla, Guwahati, Patna, Gurugram/Gurgaon
-- Mysore, Coimbatore, Nagpur, Panaji, Raipur
-- Delhi NCR emphasis: New Delhi, Noida, Greater Noida, Ghaziabad, Faridabad
+### 🏙️ **Major Cities (50+ cities)**
+**North India:**
+- Delhi NCR: New Delhi, Noida, Greater Noida, Ghaziabad, Gurugram, Faridabad
+- Uttar Pradesh: Lucknow, Kanpur, Agra, Varanasi, Meerut, Allahabad, Bareilly, Moradabad, Saharanpur, Gorakhpur, Firozabad, Mathura, Aligarh
+- Punjab: Chandigarh, Ludhiana, Amritsar, Jalandhar, Patiala, Bathinda, Moga, Hoshiarpur, Kapurthala, Sangrur
+- Haryana: Gurugram, Panipat, Karnal, Hisar, Rohtak, Ambala, Sirsa, Jhajjar, Jind, Fatehabad
+
+**Central India:**
+- Madhya Pradesh: Indore, Bhopal, Jabalpur, Gwalior, Ujjain, Sagar, Ratlam, Dewas, Satna, Vidisha, Mandsaur
+- Chhattisgarh: Raipur, Bilaspur
+- Rajasthan: Jaipur, Udaipur, Jodhpur, Kota, Bikaner, Ajmer, Alwar, Bharatpur, Sikar, Pali
+
+**Other Regions:**
+- Mumbai, Bengaluru, Chennai, Kolkata, Pune, Hyderabad, Ahmedabad
+- Kochi, Bhubaneswar, Ranchi, Dehradun, Shimla, Guwahati, Patna
+- Mysore, Coimbatore, Nagpur, Panaji, Srinagar, Agartala, Imphal
 
 ### 📡 **ISP Coverage**
 - **Reliance Jio** (Most popular in India)

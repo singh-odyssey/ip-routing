@@ -648,5 +648,505 @@
     "method": "direct",
     "working": true,
     "last_tested": "2025-09-13"
+  },
+  {
+    "ip": "103.16.45.78",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Kanpur",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.25.67.89",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Bhopal",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.45.123.56",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Agra",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.78.45.210",
+    "country": "India",
+    "region": "Chhattisgarh",
+    "city": "Bilaspur",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.89.167.45",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Varanasi",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.105.78.210",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Jabalpur",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.134.56.89",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Udaipur",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.156.78.123",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Ludhiana",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.178.45.67",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Panipat",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.189.123.45",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Meerut",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.203.67.89",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Gwalior",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.234.78.123",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Jodhpur",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.245.89.156",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Amritsar",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.256.123.78",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Karnal",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.267.45.89",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Allahabad",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.278.156.34",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Ujjain",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.289.67.123",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Kota",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.298.78.45",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Jalandhar",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.305.89.167",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Hisar",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.312.123.89",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Bareilly",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.323.45.78",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Sagar",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.334.67.156",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Bikaner",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.345.89.234",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Patiala",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.356.123.45",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Rohtak",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.367.78.89",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Moradabad",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.378.156.67",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Ratlam",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.389.234.123",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Ajmer",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.398.45.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Bathinda",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.405.67.156",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Ambala",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.412.89.234",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Saharanpur",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.423.123.78",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Dewas",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.434.45.167",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Alwar",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.445.67.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Moga",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.456.156.234",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Sirsa",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.467.89.123",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Gorakhpur",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.478.234.67",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Satna",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.489.45.156",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Bharatpur",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.498.67.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Hoshiarpur",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.505.123.234",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Jhajjar",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.512.78.156",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Firozabad",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.523.89.67",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Vidisha",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.534.156.234",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Sikar",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.545.234.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Kapurthala",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.556.67.123",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Jind",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.567.89.156",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Mathura",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.578.123.78",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Mandsaur",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.589.234.167",
+    "country": "India",
+    "region": "Rajasthan",
+    "city": "Pali",
+    "isp": "Vi (Vodafone Idea)",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.598.45.89",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Sangrur",
+    "isp": "Reliance Jio",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.605.67.234",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Fatehabad",
+    "isp": "BSNL",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
+  },
+  {
+    "ip": "103.612.156.89",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Aligarh",
+    "isp": "Bharti Airtel",
+    "method": "direct",
+    "working": true,
+    "last_tested": "2025-09-17"
   }
 ]
