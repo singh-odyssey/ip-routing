@@ -39,7 +39,7 @@ from smart_indian_simulator import SmartIndianIPSimulator
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ip-routing-bot-secret-key-2024'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Global variables for bot management
 active_bots = {}
@@ -56,6 +56,7 @@ class WebUIGoogleBot(GoogleAmbassadorBot):
         
     def emit_update(self, event_type, data):
         """Emit real-time updates to the web UI"""
+        print(f"[DEBUG] Emitting {event_type} event for session {self.session_id}: {data}")
         socketio.emit('bot_update', {
             'session_id': self.session_id,
             'event_type': event_type,

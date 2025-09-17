@@ -262,6 +262,8 @@
         const url = normalizeUrl(document.getElementById('targetUrl').value);
         const views = document.getElementById('targetViews').value;
         
+        console.log('Starting Google Bot with URL:', url, 'Views:', views);
+        
         // Validate URL
         if (!isValidUrl(url)) {
             document.getElementById('targetUrl').classList.add('is-invalid');
@@ -281,6 +283,8 @@
         currentViewNumber = 0;
         botStartTime = Date.now();
         
+        console.log('Showing waiting modal...');
+        
         // Show waiting modal
         const waitingModal = new bootstrap.Modal(document.getElementById('waitingModal'));
         waitingModal.show();
@@ -295,21 +299,27 @@
         })
         .then(response => response.json())
         .then(result => {
+            console.log('API Response:', result);
+            
             if (result.success) {
                 currentSessionId = result.session_id;
                 updateUIForRunningBot();
                 addLog('Bot started successfully', 'success');
                 showToast('Google Ambassador Bot started successfully!', 'success');
                 
+                console.log('Bot API call successful, session ID:', currentSessionId);
+                
                 // Set a timeout to hide modal if no events received
                 setTimeout(() => {
                     const modal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
                     if (modal && document.getElementById('waitingModal').classList.contains('show')) {
+                        console.log('Timeout reached, hiding modal as fallback');
                         modal.hide();
                         addLog('Bot initialization complete', 'info');
                     }
                 }, 3000);
             } else {
+                console.log('Bot API call failed:', result.error);
                 waitingModal.hide();
                 addLog(`Failed to start bot: ${result.error}`, 'error');
                 showToast(`Failed to start bot: ${result.error}`, 'error');
@@ -433,22 +443,31 @@
     
     // Socket.IO event handlers for Google Bot
     socket.on('bot_update', function(data) {
-        if (data.session_id !== currentSessionId) return;
+        console.log('Received bot_update event:', data.event_type, data);
+        
+        if (data.session_id !== currentSessionId) {
+            console.log('Ignoring event for different session:', data.session_id, 'vs', currentSessionId);
+            return;
+        }
         
         switch (data.event_type) {
             case 'bot_started':
+                console.log('Bot started event received, hiding modal...');
                 // Hide waiting modal when bot starts
                 const startModal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
                 if (startModal) {
+                    console.log('Hiding modal via bot_started event');
                     startModal.hide();
                 }
                 addLog(`Bot started for ${data.data.target_url}`, 'success');
                 break;
                 
             case 'view_start':
+                console.log('View start event received, hiding modal...');
                 // Hide waiting modal and update current view
                 const viewModal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
                 if (viewModal) {
+                    console.log('Hiding modal via view_start event');
                     viewModal.hide();
                 }
                 currentViewNumber = data.data.view_number;
