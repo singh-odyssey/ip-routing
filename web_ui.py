@@ -39,7 +39,7 @@ from smart_indian_simulator import SmartIndianIPSimulator
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ip-routing-bot-secret-key-2024'
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 # Global variables for bot management
 active_bots = {}
@@ -411,4 +411,10 @@ if __name__ == '__main__':
         print("📝 Updated requirements.txt with Flask dependencies")
     
     # Run the Flask app with SocketIO
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+    # Use PORT environment variable for deployment platforms like Render
+    port = int(os.environ.get('PORT', 5000))
+    debug_mode = os.environ.get('FLASK_ENV', 'development') != 'production'
+    
+    # Only run if this file is executed directly (not when imported by Gunicorn)
+    if __name__ == '__main__':
+        socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode)
