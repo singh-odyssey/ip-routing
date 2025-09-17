@@ -268,6 +268,8 @@ def start_google_bot():
     
     # Start bot in separate thread
     def run_bot():
+        # Small delay to ensure WebSocket connection is established
+        time.sleep(0.5)
         try:
             bot.run_continuous_unique_views(target_views)
         except Exception as e:

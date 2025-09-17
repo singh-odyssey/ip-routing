@@ -295,20 +295,37 @@
         })
         .then(response => response.json())
         .then(result => {
-            waitingModal.hide();
-            
             if (result.success) {
                 currentSessionId = result.session_id;
                 updateUIForRunningBot();
                 addLog('Bot started successfully', 'success');
                 showToast('Google Ambassador Bot started successfully!', 'success');
+                
+                // Set a timeout to hide modal if no events received
+                setTimeout(() => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
+                    if (modal && document.getElementById('waitingModal').classList.contains('show')) {
+                        modal.hide();
+                        addLog('Bot initialization complete', 'info');
+                    }
+                }, 3000);
             } else {
+                waitingModal.hide();
                 addLog(`Failed to start bot: ${result.error}`, 'error');
                 showToast(`Failed to start bot: ${result.error}`, 'error');
             }
         })
         .catch(error => {
-            waitingModal.hide();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
+            if (modal) {
+                modal.hide();
+            } else {
+                // Fallback if modal instance doesn't exist
+                document.getElementById('waitingModal').classList.remove('show');
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+            }
             addLog(`Error starting bot: ${error}`, 'error');
             showToast('Error starting bot', 'error');
         });
@@ -420,14 +437,27 @@
         
         switch (data.event_type) {
             case 'bot_started':
+                // Hide waiting modal when bot starts
+                const startModal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
+                if (startModal) {
+                    startModal.hide();
+                }
                 addLog(`Bot started for ${data.data.target_url}`, 'success');
                 break;
                 
-            case 'new_session':
-                currentViewNumber++;
+            case 'view_start':
+                // Hide waiting modal and update current view
+                const viewModal = bootstrap.Modal.getInstance(document.getElementById('waitingModal'));
+                if (viewModal) {
+                    viewModal.hide();
+                }
+                currentViewNumber = data.data.view_number;
                 document.getElementById('currentView').textContent = formatNumber(currentViewNumber);
+                addLog(`Generating view #${data.data.view_number}...`, 'info');
+                break;
                 
-                // Update current user info
+            case 'new_session':
+                // Update current user info (don't increment view number here, it's done in view_start)
                 const userInfo = document.getElementById('currentUserInfo');
                 userInfo.innerHTML = `
                     <div class="row">
@@ -493,10 +523,14 @@
                 break;
                 
             case 'waiting':
+                // Only update waiting message if modal is already shown (don't show it)
                 const modal = document.getElementById('waitingModal');
                 if (modal.classList.contains('show')) {
                     document.getElementById('waitingMessage').textContent = 
                         `Waiting ${data.data.wait_time}s before next view...`;
+                } else {
+                    // If modal is not shown, just log the waiting period
+                    addLog(`Waiting ${data.data.wait_time}s before next view...`, 'info');
                 }
                 break;
                 
