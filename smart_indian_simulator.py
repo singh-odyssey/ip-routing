@@ -35,17 +35,52 @@ class SmartIndianIPSimulator:
         
         # Advanced session variation parameters
         self.indian_user_agents = [
-            # Popular browsers in India with different versions
+            # Latest Chrome versions (Windows) - Most popular in India
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 12; OnePlus 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 11; Redmi Note 10 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            
+            # Latest Chrome versions (Mac)
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            
+            # Latest Chrome versions (Linux)
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            
+            # Popular Android devices in India with latest Chrome
+            'Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; OnePlus 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; Redmi Note 12 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; Mi 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; vivo V27) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; POCO F5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; Realme GT 2 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; Nothing Phone (2)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; iQOO 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; Oppo Find X6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36',
+            
+            # iPhone devices (growing market in India)
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
             'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+            
+            # Firefox versions
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0',
+            'Mozilla/5.0 (Android 14; Mobile; rv:122.0) Gecko/122.0 Firefox/122.0',
+            
+            # Edge versions
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+            
+            # Samsung Internet (very popular in India)
+            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; SM-A52s) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/22.0 Chrome/111.0.0.0 Mobile Safari/537.36',
+            
+            # Opera versions (popular for data savings)
+            'Mozilla/5.0 (Linux; Android 13; CPH2423) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36 OPR/80.2.4244.58675',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0'
         ]
         
         # Network patterns to simulate different ISPs
@@ -137,24 +172,142 @@ class SmartIndianIPSimulator:
                 'en-IN,hi;q=0.9,en;q=0.8',
                 'hi-IN,hi;q=0.9,en;q=0.8',
                 'en-US,en;q=0.9,hi;q=0.8',
-                'en-GB,en;q=0.9,hi;q=0.8'
+                'en-GB,en;q=0.9,hi;q=0.8',
+                'ta-IN,ta;q=0.9,en;q=0.8',
+                'te-IN,te;q=0.9,en;q=0.8',
+                'kn-IN,kn;q=0.9,en;q=0.8',
+                'ml-IN,ml;q=0.9,en;q=0.8',
+                'gu-IN,gu;q=0.9,en;q=0.8',
+                'mr-IN,mr;q=0.9,en;q=0.8',
+                'bn-IN,bn;q=0.9,en;q=0.8',
+                'pa-IN,pa;q=0.9,en;q=0.8'
             ]),
+            
+            # Enhanced Device Fingerprint characteristics
+            'screen_resolution': random.choice([
+                # Desktop resolutions
+                '1920x1080', '1366x768', '1536x864', '1440x900', '1600x900',
+                '1280x720', '1024x768', '1680x1050', '2560x1440', '3840x2160',
+                # Mobile resolutions (popular Indian devices)
+                '360x640', '375x667', '414x896', '412x915', '393x851',
+                '360x780', '375x812', '428x926', '390x844', '384x854',
+                # Tablet resolutions
+                '768x1024', '1024x768', '800x1280', '1200x1920', '834x1194'
+            ]),
+            'color_depth': random.choice([24, 32]),
+            'pixel_depth': random.choice([24, 32]),
+            'device_pixel_ratio': random.choice([1, 1.5, 2, 2.5, 3]),
+            
+            # Hardware characteristics
+            'hardware_concurrency': random.choice([2, 4, 6, 8, 12, 16]),
+            'device_memory': random.choice([2, 4, 6, 8, 12, 16, 32]),
+            'max_touch_points': random.choice([0, 1, 5, 10]),
+            
+            # WebGL fingerprint
+            'webgl_vendor': random.choice([
+                'Google Inc. (Intel)', 'Google Inc. (NVIDIA)', 'Google Inc. (AMD)',
+                'Google Inc. (Qualcomm)', 'Google Inc. (Mali)', 'WebKit WebGL',
+                'Mozilla Firefox WebGL', 'ANGLE (Intel)', 'ANGLE (NVIDIA)',
+                'Mali-G76 MC12', 'Adreno (TM) 640', 'PowerVR GE8320'
+            ]),
+            'webgl_renderer': random.choice([
+                'ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0)',
+                'ANGLE (NVIDIA, NVIDIA GeForce GTX 1060 Direct3D11 vs_5_0 ps_5_0)',
+                'Mali-G76 MC12', 'Adreno (TM) 640', 'PowerVR GE8320',
+                'Intel(R) Iris(R) Xe Graphics', 'AMD Radeon(TM) Graphics'
+            ]),
+            
+            # Canvas fingerprint components
+            'canvas_fonts': random.choice([
+                'Arial,Helvetica,Times New Roman,Courier New,Verdana,Georgia',
+                'Roboto,Open Sans,Lato,Montserrat,Oswald,Source Sans Pro',
+                'Noto Sans,Poppins,Nunito,Rubik,Work Sans,Inter',
+                'Noto Sans Devanagari,Mangal,Kokila,Utsaah,Aparajita'
+            ]),
+            
+            # Audio context fingerprint
+            'audio_sample_rate': random.choice([44100, 48000]),
+            'audio_max_channel_count': random.choice([2, 6, 8]),
+            'audio_number_of_inputs': random.choice([1, 2]),
+            'audio_number_of_outputs': random.choice([0, 2]),
+            
+            # Platform and OS characteristics
+            'platform': self._get_platform_from_ua(user_agent),
+            'oscpu': self._get_oscpu_from_ua(user_agent),
+            'app_version': user_agent,
             
             # Connection characteristics
             'connection_type': random.choice(['4g', 'fiber', 'wifi', 'broadband']),
-            'dnr': random.choice([0, 1]),
+            'effective_type': random.choice(['4g', '3g', 'slow-2g']),
+            'downlink': random.uniform(0.5, 100.0),
+            'rtt': random.randint(20, 300),
+            
+            # Browser features
+            'do_not_track': random.choice([None, '1', '0']),
+            'dnr': random.choice([0, 1]),  # Do Not Track header (legacy field)
+            'cookie_enabled': True,
+            'java_enabled': random.choice([True, False]),
+            'plugins_length': random.randint(0, 5),
+            
+            # Viewport and window characteristics
             'viewport': random.choice([
                 '1920x1080', '1366x768', '1536x864', '1440x900',
                 '360x640', '375x667', '414x896', '412x915'
             ]),
+            'outer_width': random.randint(800, 1920),
+            'outer_height': random.randint(600, 1080),
+            'inner_width': random.randint(700, 1900),
+            'inner_height': random.randint(500, 1000),
             
             # Time characteristics
+            'timezone': random.choice([
+                'Asia/Kolkata', 'Asia/Mumbai', 'Asia/Delhi', 'Asia/Chennai',
+                'Asia/Bengaluru', 'Asia/Hyderabad', 'Asia/Pune'
+            ]),
             'timezone_offset': '+05:30',  # IST
             'local_time': datetime.now().isoformat(),
         }
         
         self.current_session_id += 1
         return profile
+    
+    def _get_platform_from_ua(self, user_agent):
+        """Extract platform from user agent"""
+        if 'Windows NT 10.0' in user_agent:
+            return 'Win32'
+        elif 'Windows NT 11.0' in user_agent:
+            return 'Win32'
+        elif 'Windows NT 6.1' in user_agent:
+            return 'Win32'
+        elif 'Macintosh' in user_agent:
+            return 'MacIntel'
+        elif 'Linux' in user_agent and 'Android' not in user_agent:
+            return 'Linux x86_64'
+        elif 'iPhone' in user_agent:
+            return 'iPhone'
+        elif 'Android' in user_agent:
+            return 'Linux armv8l'
+        else:
+            return 'Win32'
+    
+    def _get_oscpu_from_ua(self, user_agent):
+        """Extract OS CPU from user agent"""
+        if 'Windows NT 10.0' in user_agent:
+            return 'Windows NT 10.0; Win64; x64'
+        elif 'Windows NT 11.0' in user_agent:
+            return 'Windows NT 10.0; Win64; x64'  # Windows 11 reports as 10.0
+        elif 'Windows NT 6.1' in user_agent:
+            return 'Windows NT 6.1; Win64; x64'
+        elif 'Macintosh' in user_agent:
+            return 'Intel Mac OS X 10_15_7'
+        elif 'Linux' in user_agent and 'Android' not in user_agent:
+            return 'Linux x86_64'
+        elif 'iPhone' in user_agent:
+            return 'iPhone'
+        elif 'Android' in user_agent:
+            return 'Linux armv8l'
+        else:
+            return 'Windows NT 10.0; Win64; x64'
     
     def create_session_from_profile(self, profile):
         """Create a requests session based on the profile"""
@@ -267,57 +420,3 @@ class SmartIndianIPSimulator:
             'cities_used': list(unique_cities),
             'isps_used': list(unique_isps)
         }
-
-def test_smart_ip_simulation():
-    """Test the smart IP simulation system"""
-    print("🧪 TESTING SMART INDIAN IP SIMULATION")
-    print("=" * 60)
-    
-    simulator = SmartIndianIPSimulator()
-    
-    print(f"🗄️ Database size: {len(simulator.indian_ips_db)} Indian IPs")
-    
-    print(f"\n🔄 Creating 5 unique Indian sessions...")
-    
-    for i in range(1, 6):
-        print(f"\n--- Session {i} ---")
-        
-        session = simulator.get_unique_indian_session()
-        info = simulator.get_session_info(session)
-        
-        print(f"IP: {info['simulated_ip']}")
-        print(f"City: {info['city']}, {info['region']}")
-        print(f"ISP: {info['isp']}")
-        print(f"Session ID: {info['session_id']}")
-        print(f"Connection: {info['connection_type']}")
-        print(f"Signature: {info['unique_signature']}")
-        
-        # Test the session
-        try:
-            response = session.get('http://httpbin.org/ip', timeout=8)
-            if response.status_code == 200:
-                data = response.json()
-                actual_ip = data.get('origin', 'unknown')
-                print(f"✅ Session working, actual IP: {actual_ip}")
-            else:
-                print(f"❌ Session failed: {response.status_code}")
-        except Exception as e:
-            print(f"❌ Session error: {e}")
-        
-        session.close()
-        time.sleep(0.5)
-    
-    # Verify uniqueness
-    print(f"\n📊 UNIQUENESS ANALYSIS:")
-    uniqueness = simulator.verify_session_uniqueness()
-    
-    print(f"Total sessions created: {uniqueness['total_sessions']}")
-    print(f"Unique IPs simulated: {uniqueness['unique_ips']}")
-    print(f"Unique cities: {uniqueness['unique_cities']}")
-    print(f"Unique ISPs: {uniqueness['unique_isps']}")
-    print(f"Unique signatures: {uniqueness['unique_signatures']}")
-    print(f"Cities covered: {', '.join(uniqueness['cities_used'])}")
-    print(f"ISPs covered: {', '.join(uniqueness['isps_used'])}")
-
-if __name__ == "__main__":
-    test_smart_ip_simulation()

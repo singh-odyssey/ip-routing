@@ -149,14 +149,24 @@ class SeminarParallelBot:
             'X-Geo-Region': session.profile['ip_info']['region'],
             'X-Geo-City': session.profile['ip_info']['city'],
             
-            # Student language preferences (more diverse in seminar)
+            # Student language preferences (more diverse in seminar - representing different Indian regions)
             'Accept-Language': random.choice([
                 'en-IN,hi;q=0.9,en;q=0.8',
                 'hi-IN,hi;q=0.9,en;q=0.8',
                 'en-US,en;q=0.9,hi;q=0.8',
                 'en-GB,en;q=0.9,hi;q=0.8',
-                'en-IN,en;q=0.9,hi;q=0.8,ta;q=0.7',
-                'en-IN,en;q=0.9,hi;q=0.8,te;q=0.7',
+                'ta-IN,ta;q=0.9,en;q=0.8',
+                'te-IN,te;q=0.9,en;q=0.8',
+                'kn-IN,kn;q=0.9,en;q=0.8',
+                'ml-IN,ml;q=0.9,en;q=0.8',
+                'gu-IN,gu;q=0.9,en;q=0.8',
+                'mr-IN,mr;q=0.9,en;q=0.8',
+                'bn-IN,bn;q=0.9,en;q=0.8',
+                'pa-IN,pa;q=0.9,en;q=0.8',
+                'or-IN,or;q=0.9,en;q=0.8',
+                'as-IN,as;q=0.9,en;q=0.8',
+                'ur-IN,ur;q=0.9,en;q=0.8',
+                'sa-IN,sa;q=0.9,en;q=0.8'
             ]),
             
             # Browser headers
@@ -171,7 +181,12 @@ class SeminarParallelBot:
             
             # Time headers
             'Date': now.strftime('%a, %d %b %Y %H:%M:%S') + ' IST',
-            'X-Timezone': 'Asia/Kolkata',
+            'X-Timezone': random.choice([
+                'Asia/Kolkata', 'Asia/Mumbai', 'Asia/Delhi', 'Asia/Chennai',
+                'Asia/Bengaluru', 'Asia/Hyderabad', 'Asia/Pune', 'Asia/Ahmedabad',
+                'Asia/Jaipur', 'Asia/Lucknow', 'Asia/Kanpur', 'Asia/Surat',
+                'Asia/Patna', 'Asia/Bhopal', 'Asia/Indore', 'Asia/Nagpur'
+            ]),
             
             # Network type (mostly mobile data in seminar)
             'X-Network-Type': random.choice(['4G', '5G']) if is_mobile else 'WiFi',

@@ -32,14 +32,26 @@ import uuid
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import our bot classes
-from google_ambassador_bot import GoogleAmbassadorBot
-from seminar_parallel_bot import SeminarParallelBot
-from smart_indian_simulator import SmartIndianIPSimulator
+try:
+    from google_ambassador_bot import GoogleAmbassadorBot
+    from seminar_parallel_bot import SeminarParallelBot
+    from smart_indian_simulator import SmartIndianIPSimulator
+except ImportError as e:
+    print(f"Error importing bot modules: {e}")
+    sys.exit(1)
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ip-routing-bot-secret-key-2024'
-socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Configure for production
+if os.environ.get('FLASK_ENV') == 'production':
+    app.config.update(
+        DEBUG=False,
+        TESTING=False
+    )
+
+socketio = SocketIO(app, cors_allowed_origins="*", logger=False, engineio_logger=False)
 
 # Global variables for bot management
 active_bots = {}
@@ -418,6 +430,8 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug_mode = os.environ.get('FLASK_ENV', 'development') != 'production'
     
-    # Only run if this file is executed directly (not when imported by Gunicorn)
+    # For production deployment, we let Gunicorn handle the server
+    # Only run the development server when this file is executed directly
     if __name__ == '__main__':
-        socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode)
+        print("🚀 Starting development server...")
+        socketio.run(app, host='0.0.0.0', port=port, debug=debug_mode, allow_unsafe_werkzeug=True)

@@ -47,5 +47,12 @@ geckodriver.log
 chromedriver.log
 
 # Test results and local files
-speed_test.py 
+*.json
+*.csv
+*.log
+*_test.py
+*_tests.py
+test_*.py
+temp/
+tmp/
 speedtest_result.json
