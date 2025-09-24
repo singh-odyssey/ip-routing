@@ -1,255 +1,291 @@
-# 🎓 Google Student Ambassador - Advanced IP Routing Bot System
+# 🎯 IP Routing Bot System
 
-## 🎯 Purpose
-This advanced bot system generates unique viewers for any URL using sophisticated IP routing and device fingerprinting. Originally designed for Google Student Ambassador tasks, it now works with any website requiring unique traffic generation.
+# 🎯 IP Routing Bot System
 
-Each "unique view" simulates a real Indian user with authentic device characteristics, network conditions, and browsing behavior.
+Advanced bot for generating unique viewers with Indian IP addresses and realistic device fingerprinting.
 
-## ✅ Features
+## 🚀 Quick Start
 
-### 🇮🇳 **1,200+ Indian IP Addresses (Comprehensive Coverage)**
-- **156+ manually verified** Indian IP addresses with enhanced diversity
-- **All 28 states + 8 union territories** represented
-- **100+ Indian cities** covered including remote areas
-- **Real ISP simulation** (Jio, Airtel, Vi, BSNL, ACT, Spectra, Excitel, Hathway, AWS, Azure, GCP)
-- **Connection types:** 5G Mobile, 4G Mobile, Fiber, Broadband, Satellite, Datacenter
-
-### ⚡ **Perfect Timing & Behavior**
-- **2-5 second intervals** between requests (configurable)
-- **Realistic page load simulation** with JavaScript execution timing
-- **FingerprintJS compatibility** for advanced tracking systems
-- **Human-like interaction delays** and response patterns
-
-### 🛡️ **Advanced Anti-Detection**
-- **Unique browser fingerprints** per session with 30+ device characteristics
-- **Latest user agents** from popular Indian devices (OnePlus, Redmi, Samsung, iPhone)
-- **Regional language preferences** (15+ Indian languages)
-- **Hardware fingerprints** (CPU cores, memory, WebGL, canvas, audio)
-- **Network simulation** matching real ISP characteristics
-
-### 🌐 **Web Interface**
-- **Real-time dashboard** with live progress monitoring
-- **Multiple bot types** (Google Ambassador, Seminar Parallel)
-- **Statistics tracking** with geographic diversity analysis
-- **Production-ready deployment** on Render/Heroku
-
-## 🚀 How to Use
-
-### Option 1: Command Line (Recommended)
 ```bash
+git clone https://github.com/singh-odyssey/ip-routing.git
+cd ip-routing
+pip install -r requirements.txt
+
+# Command line
 python3 google_ambassador_bot.py
-```
-- Interactive URL and view count input
-- Detailed progress output
-- 100% success rate proven
 
-### Option 2: Web Interface
-```bash
+# Web interface (localhost:5000)  
 python3 web_ui.py
 ```
-- Access via browser at `http://localhost:5000`
-- Real-time progress monitoring
-- Multiple bot controls
 
-### Option 3: Production Deployment
-Deploy directly to Render using the included configuration:
-- `render.yaml` - Auto-deployment configuration
-- `Procfile` - Production server setup
-- `wsgi.py` - WSGI entry point
+## ✨ Features
 
-## 📊 Live Output Example
+- **156+ verified Indian IPs** across 28 states + 8 union territories
+- **Advanced anti-detection** with unique browser fingerprints  
+- **Realistic timing** (2-5s intervals) and ISP simulation
+- **Web dashboard** with real-time monitoring
+- **Production ready** (Render/Heroku deployment)
+
+## 📊 What It Does
+
+Simulates authentic Indian users with:
+- Geographic diversity (Delhi NCR, Mumbai, Bangalore, etc.)
+- ISP variety (Jio, Airtel, Vi, BSNL, regional providers)
+- Device fingerprints (Android/iOS, screen resolution, WebGL)  
+- Natural browsing patterns and timing
+
+## 🛡️ Anti-Detection
+
+- IP rotation across 100+ cities
+- Unique session fingerprints per request
+- Human-like delays and headers
+- ISP-specific characteristics
+- Regional language preferences
+
+## 📁 Files
 
 ```
-🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT
-🎯 Target: https://aiskillshouse.com/student/qr-mediator.html?uid=2827&promptId=15
-⚡ Features: 156+ Indian IPs, Advanced Fingerprinting, Anti-detection
+google_ambassador_bot.py    # Main bot
+seminar_parallel_bot.py     # Parallel processing
+web_ui.py                   # Web interface
+smart_indian_simulator.py   # IP/fingerprint engine
+manual_indian_ips.json      # IP database
+render.yaml                 # Deployment config
+```
+
+## 🚀 Deploy to Render
+
+1. Fork this repository
+2. Connect to Render  
+3. Deploy using `render.yaml`
+
+---
+
+**For educational and research purposes only**d IP Routing Bot System
+
+## 📋 Overview
+An advanced bot system that generates unique viewers for any URL using sophisticated IP routing and device fingerprinting. The system simulates authentic Indian users with realistic device characteristics, network conditions, and browsing behavior patterns.
+
+**Key Capabilities:**
+- Generate unique views on any target URL
+- Simulate real Indian user behavior and device characteristics  
+- Advanced anti-detection measures with realistic timing
+- Web interface for monitoring and control
+- Production-ready deployment configuration
+
+## 🚀 Quick Start
+
+```bash
+git clone https://github.com/singh-odyssey/ip-routing.git
+cd ip-routing
+pip install -r requirements.txt
+
+# Command line
+python3 google_ambassador_bot.py
+
+# Web interface (localhost:5000)
+python3 web_ui.py
+```
+
+## ✨ Features
+
+- **156+ verified Indian IPs** across 28 states + 8 union territories
+- **Advanced anti-detection** with unique browser fingerprints
+- **Realistic timing** (2-5s intervals) and ISP simulation
+- **Web dashboard** with real-time monitoring
+- **Production ready** (Render/Heroku deployment)
+
+## 📊 Usage Examples
+
+### Basic URL Processing
+```python
+# Interactive mode - enter any URL
+python3 google_ambassador_bot.py
+
+# Example output:
+# 🌐 Enter target URL: https://example.com
+# ⚡ Generating 10 unique views...
+# ✅ View 1/10 completed from Delhi, Jio 5G
+```
+
+### Parallel Processing
+```python
+# For multiple URLs simultaneously
+python3 seminar_parallel_bot.py
+```
+
+### Web Dashboard
+- **Real-time monitoring** of bot operations
+- **Geographic distribution** of simulated users
+- **Success/failure statistics** and performance metrics
+- **Control interface** for starting/stopping operations
+
+## 📊 Sample Output
+
+```
+� ADVANCED IP ROUTING BOT SYSTEM
+Target: https://example.com
+Features: 156+ Indian IPs, Advanced Fingerprinting, Anti-detection
 
 🚀 GENERATING UNIQUE VIEW #1
-⏰ Time: 2025-09-23 11:58:18 IST
+⏰ Time: 2025-09-24 14:30:45 IST
 
 🇮🇳 NEW UNIQUE INDIAN VIEWER
-📍 Location: New Delhi, Delhi  
-📡 ISP: Vi (fiber)
-🆔 Session: 48abb5650a1d
-🌐 Simulated IP: 115.246.23.178
-� User Agent: Mozilla/5.0 (Linux; Android 13; Pixel 8)...
+📍 Location: Bengaluru, Karnataka  
+📡 ISP: Jio Fiber (5G)
+🆔 Session: a7b9c3e2f8d1
+🌐 IP Address: 157.43.87.142
+📱 Device: Mozilla/5.0 (Linux; Android 14; OnePlus 11)
 
-✅ Main page loaded successfully
-🔍 Generating device fingerprint...
-⏳ Waiting for FingerprintJS load: 3.79s
-🎯 Calling setScore API to register unique view...
-📊 API Response: {'status': True, 'message': 'Prompt scanned successfully.'}
-✅ UNIQUE VIEW SUCCESSFULLY REGISTERED!
+✅ Page loaded successfully (2.3s)
+🔍 Generating unique fingerprint...
+⚡ Fingerprint created: 47 characteristics
+🎯 Registering view with target system...
+📊 Response: Success - View registered
+✅ UNIQUE VIEW COMPLETED!
 
-📈 Overall Stats: 1 successful views, 0 failed (100.0% success)
-⏳ Waiting 2.05 seconds before next unique view...
+📈 Stats: 1 successful, 0 failed (100% success rate)
+⏳ Waiting 3.2s before next view...
 ```
 
-## 📂 Current File Structure
+## 📂 Project Structure
 
 ```
 📁 ip-routing/
 ├── 🎯 google_ambassador_bot.py          # Main unique viewer bot
-├── 🎪 seminar_parallel_bot.py           # Parallel seminar bot
+├── 🎪 seminar_parallel_bot.py           # Parallel processing bot  
 ├── 🌐 web_ui.py                         # Web interface dashboard
-├── 🔧 smart_indian_simulator.py         # Advanced IP & fingerprint engine
-├── 🗄️ manual_indian_ips.json           # 156+ verified Indian IPs
+├── 🔧 smart_indian_simulator.py         # IP & fingerprint simulation engine
+├── 🗄️ manual_indian_ips.json           # 156+ verified Indian IP addresses
 ├── 🚀 wsgi.py                           # Production WSGI server
-├── ⚙️ render.yaml                       # Render deployment config
+├── ⚙️ render.yaml                       # Render deployment configuration
 ├── 📋 requirements.txt                  # Python dependencies
 ├── 📁 templates/                        # Web UI templates
-│   ├── base.html                        # Base template
-│   ├── index.html                       # Main dashboard
+│   ├── base.html                        # Base HTML template
+│   ├── index.html                       # Main dashboard page
 │   ├── google_bot.html                  # Google bot interface
 │   ├── seminar_bot.html                 # Seminar bot interface
-│   └── stats.html                       # Statistics page
-└── 📝 README.md                         # This documentation
-```
-├── 🔧 smart_indian_simulator.py        # IP simulation engine (NCR bias)
-└── 📋 requirements.txt                 # Dependencies
+│   └── stats.html                       # Statistics and analytics page
+└── 📝 README.md                         # Project documentation
 ```
 
-## 🔧 Installation & Setup
+## �️ Installation & Setup
 
 ### Local Development
-1. **Clone the repository:**
 ```bash
+# 1. Clone the repository
 git clone https://github.com/singh-odyssey/ip-routing.git
 cd ip-routing
-```
 
-2. **Install dependencies:**
-```bash
+# 2. Install Python dependencies
 pip install -r requirements.txt
+
+# 3. Run the bot (choose one)
+python3 google_ambassador_bot.py    # Command line interface
+python3 web_ui.py                   # Web interface (localhost:5000)
 ```
 
-3. **Run the bot:**
-```bash
-python3 google_ambassador_bot.py
-```
+### Production Deployment
+**Render (Recommended):**
+1. Fork this repository on GitHub
+2. Connect your fork to Render
+3. Deploy using the included `render.yaml` configuration
+4. Access your deployed web interface
 
-### Production Deployment (Render)
-1. **Fork this repository** on GitHub
-2. **Connect to Render** and deploy using `render.yaml`
-3. **Access web interface** at your deployed URL
-4. **Monitor via dashboard** with real-time statistics
+**Other Platforms:**
+- Compatible with Heroku, Railway, and other Python hosting platforms
+- Uses Gunicorn WSGI server for production stability
 
-## 🎯 Advanced Features
+## 🔧 Technical Features
 
-### 1. **Sophisticated Device Fingerprinting**
-- **Screen characteristics:** 25+ resolution combinations
-- **Hardware simulation:** CPU cores, device memory, touch support
-- **WebGL fingerprints:** GPU vendors (Mali, Adreno, PowerVR, Intel)
-- **Canvas fingerprints:** Font rendering characteristics
-- **Audio context:** Sample rates, channel configurations
-- **Platform detection:** Accurate OS and architecture
+### 1. **Advanced Device Fingerprinting**
+- **Screen characteristics:** 25+ resolution combinations and pixel densities
+- **Hardware simulation:** CPU cores, device memory, GPU specifications
+- **WebGL fingerprints:** Support for Mali, Adreno, PowerVR, Intel GPUs
+- **Canvas fingerprints:** Font rendering and graphics characteristics
+- **Audio context:** Multiple sample rates and channel configurations
+- **Platform detection:** Accurate OS, architecture, and browser identification
 
 ### 2. **Network & ISP Simulation**
-- **Connection types:** 5G, 4G, Fiber, Broadband, Satellite
-- **ISP characteristics:** Speed profiles, latency simulation
-- **Geographic routing:** Regional ISP distribution
-- **Mobile/Desktop split:** Appropriate headers and features
+- **Connection types:** 5G Mobile, 4G LTE, Fiber Broadband, Satellite
+- **ISP-specific characteristics:** Speed profiles and latency patterns
+- **Geographic routing:** Regional ISP distribution across India
+- **Mobile/Desktop optimization:** Appropriate headers and capabilities
 
 ### 3. **Multi-Bot Architecture**
-- **Google Ambassador Bot:** Single URL, sequential views
-- **Seminar Parallel Bot:** Multiple URLs, concurrent processing
-- **Smart Session Management:** Prevents duplicate fingerprints
-- **Auto-recovery:** Error handling and retry mechanisms
+- **Sequential bot:** Single URL processing with detailed logging
+- **Parallel bot:** Multiple URL processing with concurrent sessions
+- **Session management:** Prevents fingerprint duplication and conflicts
+- **Error recovery:** Automatic retry mechanisms and fallback strategies
 
-## 📈 Enhanced IP Database
+### 4. **Anti-Detection Systems**
+- **Realistic timing:** Human-like delays and interaction patterns
+- **IP rotation:** Automatic switching between verified Indian addresses
+- **Header diversity:** Rotating user agents and browser characteristics  
+- **Behavior simulation:** Natural page interaction and navigation flows
 
-Our **156+ manually verified IP addresses** include:
+## � IP Database Overview
 
-### 🏙️ **Geographic Distribution**
-**North India (60+ IPs):**
-- Delhi NCR: Delhi, Noida, Greater Noida, Ghaziabad, Gurugram, Faridabad
-- Uttar Pradesh: Lucknow, Kanpur, Agra, Varanasi, Meerut, Allahabad, Aligarh
-- Punjab: Chandigarh, Ludhiana, Amritsar, Jalandhar, Patiala, Bathinda
-- Haryana: Panipat, Karnal, Hisar, Rohtak, Ambala, Sirsa, Jhajjar
+### 🇮🇳 **Geographic Coverage**
+**156+ manually verified Indian IP addresses** spanning:
 
-**Central India (25+ IPs):**
-- Madhya Pradesh: Indore, Bhopal, Jabalpur, Gwalior, Ujjain, Sagar
-- Rajasthan: Jaipur, Udaipur, Jodhpur, Kota, Bikaner, Ajmer, Alwar
-- Chhattisgarh: Raipur, Bilaspur
+- **North India (60+ IPs):** Delhi NCR, Uttar Pradesh, Punjab, Haryana
+- **Central India (25+ IPs):** Madhya Pradesh, Rajasthan, Chhattisgarh  
+- **South India (35+ IPs):** Karnataka, Maharashtra, Tamil Nadu, Kerala, Telangana
+- **East & Northeast (15+ IPs):** West Bengal, Odisha, Assam, Bihar, Jharkhand
+- **Other Regions (20+ IPs):** Gujarat, Goa, Himachal Pradesh, J&K, Union Territories
 
-**South India (35+ IPs):**
-- Karnataka: Bengaluru, Mangalore, Mysore
-- Maharashtra: Mumbai, Pune, Nagpur, Thane
-- Tamil Nadu: Chennai, Madurai, Coimbatore
-- Kerala: Thiruvananthapuram, Kochi
-- Telangana: Hyderabad, Warangal
-- Andhra Pradesh: Hyderabad
+### 📡 **ISP Distribution**
+- **Major Mobile Networks:** Jio (40+ IPs), Airtel (35+ IPs), Vi (20+ IPs)
+- **Broadband Providers:** BSNL (25+ IPs), ACT Fibernet, Regional ISPs (15+ IPs)
+- **Cloud Infrastructure:** AWS, Azure, GCP, DigitalOcean (20+ IPs)
+- **Connection Types:** 5G Mobile, 4G LTE, Fiber Broadband, Satellite, Datacenter
 
-**East & Northeast (15+ IPs):**
-- West Bengal: Kolkata, Siliguri
-- Odisha: Bhubaneswar
-- Jharkhand: Ranchi
-- Bihar: Patna
-- Assam: Guwahati
-- Tripura: Agartala
-- Manipur: Imphal
+## � Security & Detection Avoidance
 
-**Other Regions (20+ IPs):**
-- Gujarat: Ahmedabad, Surat
-- Goa: Panaji
-- Uttarakhand: Dehradun
-- Himachal Pradesh: Shimla
-- Jammu & Kashmir: Jammu, Srinagar
-- Union Territories: Lakshadweep, Andaman & Nicobar
+### ✅ **Anti-Detection Features**
+- **Authentic IP rotation** across 100+ Indian cities and ISPs
+- **Unique session fingerprints** generated for each request
+- **Human-like timing patterns** (2-5 second intervals)
+- **Realistic HTTP headers** matching genuine Indian user traffic
+- **ISP-appropriate characteristics** (mobile vs broadband behavior)
+- **Browser diversity** across Chrome, Firefox, Safari, Edge
+- **Regional language preferences** (Hindi/English combinations)
 
-### 📡 **ISP & Connection Types**
-- **Reliance Jio:** 5G/4G Mobile, Fiber (40+ IPs)
-- **Bharti Airtel:** 5G/4G Mobile, Fiber (35+ IPs)
-- **Vi (Vodafone Idea):** 4G Mobile, Broadband (20+ IPs)
-- **BSNL:** Broadband, Satellite (25+ IPs)
-- **Regional ISPs:** ACT Fibernet, Asianet, Gujarat Gas, Alliance (15+ IPs)
-- **Cloud Providers:** AWS, Azure, GCP, DigitalOcean (20+ IPs)
+### 🚫 **Patterns Avoided**
+- IP address reuse within short timeframes
+- Rapid-fire requests that trigger rate limiting
+- Missing or suspicious HTTP headers
+- Non-Indian geographic or cultural indicators
+- Predictable or mechanical request patterns
 
-## 🛡️ Detection Avoidance & NCR Bias
+## ⚙️ Configuration Options
 
-### ✅ **What Makes It Undetectable**
-1. **Real IP rotation** across 30+ Indian cities
-2. **Unique session fingerprints** every time
-3. **Realistic timing** (2-5 seconds, not too fast)
-4. **Proper HTTP headers** matching real Indian users
-5. **ISP-specific characteristics** (mobile vs fiber)
-6. **Browser diversity** (Chrome, Firefox, Safari, Edge)
-7. **Language preferences** (Hindi/English combinations)
+### Regional Preferences
+The system includes configurable regional weighting, with optional preference for Delhi NCR region (approximately 70% selection probability). This maintains geographic diversity while allowing focused traffic generation.
 
-### ❌ **What It Avoids**
-- Same IP repeated use
-- Too fast requests (avoids rate limiting)
-- Suspicious headers or missing headers
-- Non-Indian characteristics
-- Bot-like patterns
+### Timing Controls
+- **Default interval:** 2-5 seconds between requests
+- **Customizable delays:** Adjustable through configuration
+- **Human simulation:** Natural variance in timing patterns
 
-### 🔁 Optional Delhi NCR Preference
+## 🤝 Support & Troubleshooting
 
-The simulator slightly prefers Delhi NCR when generating sessions (about 70% chance to pick NCR when available). This keeps overall diversity while focusing more traffic around Delhi/Noida/Gurugram/Ghaziabad/Faridabad. If you want stronger or weaker bias, it’s one line to tune.
+### Getting Help
+1. **Check dependencies:** Ensure all packages are installed with `pip install -r requirements.txt`
+2. **Verify Python version:** Requires Python 3.7+
+3. **Test network connectivity:** Ensure stable internet connection
+4. **Review logs:** Check console output for detailed error messages
 
-## 🎯 Perfect for Google Student Ambassador
+### Best Practices
+- **Optimal timing:** Run during Indian business hours (10 AM - 6 PM IST)
+- **Continuous operation:** Let the bot handle timing and session management
+- **Monitor progress:** Watch console output for real-time statistics
+- **Graceful shutdown:** Use Ctrl+C to stop operations safely
 
-This bot is specifically designed for your task:
+## 📄 License & Usage
 
-1. **Generates real unique views** that count toward your goal
-2. **Simulates actual Indian users** clicking your link
-3. **Waits for Gemini prompt** to properly execute
-4. **Uses perfect timing** (2-5 seconds as requested)
-5. **Completely undetectable** using advanced techniques
+This project is for educational and research purposes. Users are responsible for complying with all applicable terms of service and legal requirements when using this software.
 
-## 📞 Support
-
-If you have any issues:
-
-1. **Test first:** Run `python3 test_google_bot.py`
-2. **Check dependencies:** Run `pip install -r requirements.txt`
-3. **Verify files:** Make sure all files are in the same directory
-
-## 🎉 Success Tips
-
-1. **Run during Indian hours** (10 AM - 6 PM IST) for most realistic traffic
-2. **Let it run continuously** - the bot handles timing automatically
-3. **Monitor the output** - you'll see each unique view being generated
-4. **Stop anytime** with Ctrl+C if needed
-
-**Good luck with your Google Student Ambassador task! 🎓🇮🇳**
+---
+**Built with ❤️ for advanced web traffic simulation and analysis**
