@@ -26,6 +26,7 @@ from smart_indian_simulator import SmartIndianIPSimulator
 import pytz
 import logging
 from urllib.parse import urlparse
+import requests.exceptions
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -308,27 +309,44 @@ class GoogleAmbassadorBot:
                 uid = query_params.get('uid', ['2827'])[0]
                 prompt_id = query_params.get('promptId', ['6'])[0]
                 
-                # Prepare form data
+                # Prepare form data (multipart/form-data format)
                 form_data = {
-                    'uid': uid,
-                    'promptId': prompt_id,
-                    'deviceId': device_id,
-                    'ipAddress': real_ip
+                    'uid': (None, uid),
+                    'promptId': (None, prompt_id),
+                    'deviceId': (None, device_id),
+                    'ipAddress': (None, real_ip)
                 }
                 
                 # Make the API call
                 api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
                 
-                # Add API-specific headers
+                # Add API-specific headers (remove Content-Type to let requests set it with boundary)
                 api_headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
                     'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
                     'Referer': self.target_url,
                     'X-Requested-With': 'XMLHttpRequest'
                 }
                 session.headers.update(api_headers)
                 
-                api_response = session.post(api_url, data=form_data, timeout=15)
+                # Use files parameter for multipart/form-data encoding
+                max_retries = 2
+                retry_count = 0
+                
+                while retry_count <= max_retries:
+                    try:
+                        api_response = session.post(api_url, files=form_data, timeout=20)
+                        break  # Success, exit retry loop
+                    except requests.exceptions.Timeout:
+                        retry_count += 1
+                        if retry_count <= max_retries:
+                            logger.warning(f"⚠️ API timeout, retrying ({retry_count}/{max_retries})...")
+                            time.sleep(random.uniform(2, 5))
+                        else:
+                            logger.error(f"❌ API timeout after {max_retries} retries")
+                            return False
+                    except Exception as e:
+                        logger.error(f"❌ API request error: {e}")
+                        return False
                 
                 if api_response.status_code == 200:
                     try:

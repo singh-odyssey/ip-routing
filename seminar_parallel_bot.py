@@ -30,6 +30,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock, Semaphore, Event
 import sys
 from urllib.parse import urlparse
+import requests.exceptions
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -77,6 +78,9 @@ class SeminarParallelBot:
         
         # Seminar configuration
         self.max_students = max_students
+        # Limit concurrent API calls to prevent server rate limiting
+        # Server allows ~50-60 requests per minute, so keep it low (max 10 at a time)
+        self.api_semaphore = Semaphore(10)
         self.semaphore = Semaphore(max_students)
         
         # Thread-safe counters
@@ -216,90 +220,117 @@ class SeminarParallelBot:
     
     def simulate_student_qr_scan(self, session, student_id):
         """Simulate a student scanning QR code and accessing the URL"""
-        try:
-            # Step 1: Load the main page (QR scan result)
-            response = session.get(self.target_url, timeout=15, allow_redirects=True)
-            
-            if response.status_code != 200:
-                return False, f"Student {student_id}: HTTP Error {response.status_code}"
-            
-            # Step 2: Get student's real IP (like real browser)
+        max_retries = 2
+        retry_count = 0
+        
+        while retry_count <= max_retries:
             try:
-                ip_response = session.get("https://api.ipify.org?format=json", timeout=10)
-                if ip_response.status_code == 200:
-                    ip_data = ip_response.json()
-                    real_ip = ip_data.get('ip', 'unknown')
-                else:
+                # Step 1: Load the main page (QR scan result)
+                response = session.get(self.target_url, timeout=15, allow_redirects=True)
+                
+                if response.status_code != 200:
+                    return False, f"Student {student_id}: HTTP Error {response.status_code}"
+                
+                # Step 2: Get student's real IP (like real browser)
+                try:
+                    ip_response = session.get("https://api.ipify.org?format=json", timeout=10)
+                    if ip_response.status_code == 200:
+                        ip_data = ip_response.json()
+                        real_ip = ip_data.get('ip', 'unknown')
+                    else:
+                        real_ip = session.profile['ip_info']['ip']
+                except:
                     real_ip = session.profile['ip_info']['ip']
-            except:
-                real_ip = session.profile['ip_info']['ip']
-            
-            # Step 3: Generate unique student device fingerprint
-            device_id = hashlib.md5(f"{real_ip}_{session.profile['session_id']}_{student_id}_{random.random()}".encode()).hexdigest()
-            
-            # Step 4: Simulate page processing time (students reading/understanding)
-            processing_time = random.uniform(1.5, 3.5)  # Realistic student reaction time
-            time.sleep(processing_time)
-            
-            # Step 5: Call the setScore API (register the unique view) - only for supported domains
-            parsed_url = urlparse(self.target_url)
-            domain = parsed_url.netloc.lower()
-            
-            # Extract parameters from URL if available
-            from urllib.parse import parse_qs
-            query_params = parse_qs(parsed_url.query)
-            
-            # Check if this is a supported domain with API integration
-            if 'aiskillshouse.com' in domain:
-                # Use existing aiskillshouse.com API
-                uid = query_params.get('uid', ['2827'])[0]
-                prompt_id = query_params.get('promptId', ['6'])[0]
                 
-                form_data = {
-                    'uid': uid,
-                    'promptId': prompt_id,
-                    'deviceId': device_id,
-                    'ipAddress': real_ip
-                }
+                # Step 3: Generate unique student device fingerprint
+                device_id = hashlib.md5(f"{real_ip}_{session.profile['session_id']}_{student_id}_{random.random()}".encode()).hexdigest()
                 
-                api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
+                # Step 4: Simulate page processing time (students reading/understanding)
+                processing_time = random.uniform(1.5, 3.5)  # Realistic student reaction time
+                time.sleep(processing_time)
                 
-                # API headers
-                api_headers = {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
-                    'Referer': self.target_url,
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-                session.headers.update(api_headers)
+                # Step 5: Call the setScore API with rate limiting
+                parsed_url = urlparse(self.target_url)
+                domain = parsed_url.netloc.lower()
                 
-                api_response = session.post(api_url, data=form_data, timeout=15)
+                # Extract parameters from URL if available
+                from urllib.parse import parse_qs
+                query_params = parse_qs(parsed_url.query)
                 
-                if api_response.status_code == 200:
-                    try:
-                        api_result = api_response.json()
-                        
-                        if api_result.get('status') == True:
-                            return True, f"Student {student_id}: ✅ Scan successful - {api_result.get('message', 'Registered')}"
-                        else:
-                            message = api_result.get('message', 'Unknown error')
-                            return False, f"Student {student_id}: ⚠️ API returned false - {message}"
+                # Check if this is a supported domain with API integration
+                if 'aiskillshouse.com' in domain:
+                    # Use existing aiskillshouse.com API
+                    uid = query_params.get('uid', ['2827'])[0]
+                    prompt_id = query_params.get('promptId', ['6'])[0]
+                    
+                    # Prepare form data (multipart/form-data format)
+                    form_data = {
+                        'uid': (None, uid),
+                        'promptId': (None, prompt_id),
+                        'deviceId': (None, device_id),
+                        'ipAddress': (None, real_ip)
+                    }
+                    
+                    api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
+                    
+                    # API headers (remove Content-Type to let requests set it with boundary)
+                    api_headers = {
+                        'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
+                        'Referer': self.target_url,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                    session.headers.update(api_headers)
+                    
+                    # Use semaphore to limit concurrent API calls (prevent server overload)
+                    with self.api_semaphore:
+                        # Add small delay before API call to further reduce rate
+                        time.sleep(random.uniform(0.5, 1.5))
+                        # Use files parameter for multipart/form-data encoding
+                        # Increased timeout to handle rate limiting delays
+                        api_response = session.post(api_url, files=form_data, timeout=30)
+                    
+                    if api_response.status_code == 200:
+                        try:
+                            api_result = api_response.json()
                             
-                    except Exception as e:
-                        return False, f"Student {student_id}: ❌ Error parsing response - {e}"
+                            if api_result.get('status') == True:
+                                return True, f"Student {student_id}: ✅ Scan successful - {api_result.get('message', 'Registered')}"
+                            else:
+                                message = api_result.get('message', 'Unknown error')
+                                return False, f"Student {student_id}: ⚠️ API returned false - {message}"
+                                
+                        except Exception as e:
+                            return False, f"Student {student_id}: ❌ Error parsing response - {e}"
+                    else:
+                        return False, f"Student {student_id}: ❌ API call failed - {api_response.status_code}"
                 else:
-                    return False, f"Student {student_id}: ❌ API call failed - {api_response.status_code}"
-            else:
-                # For other domains, just simulate a successful visit without API call
-                return True, f"Student {student_id}: ✅ Page visit successful (no API integration for {domain})"
-                
-        except Exception as e:
-            return False, f"Student {student_id}: ❌ Scan error - {e}"
+                    # For other domains, just simulate a successful visit without API call
+                    return True, f"Student {student_id}: ✅ Page visit successful (no API integration for {domain})"
+                    
+            except requests.exceptions.Timeout as e:
+                retry_count += 1
+                if retry_count <= max_retries:
+                    # Exponential backoff: wait longer on each retry
+                    wait_time = random.uniform(3, 8) * retry_count
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    return False, f"Student {student_id}: ❌ Timeout after {max_retries} retries"
+            except Exception as e:
+                return False, f"Student {student_id}: ❌ Scan error - {e}"
+        
+        return False, f"Student {student_id}: ❌ Failed after {max_retries} retries"
     
     def student_worker(self, student_id):
         """Worker function for each student"""
         # Wait for seminar start signal
         self.start_event.wait()
+        
+        # Add staggered delay to prevent rate limiting (server allows ~60 requests/minute)
+        # With 200 students, we need to spread over ~4 minutes
+        # Random delay between 1-4 seconds per student
+        stagger_delay = random.uniform(1.0, 4.0)
+        time.sleep(stagger_delay)
         
         try:
             # Create student session
@@ -338,6 +369,7 @@ class SeminarParallelBot:
         print(f"👥 Students in seminar: {num_students}")
         print(f"📱 Each student will scan the QR code simultaneously")
         print(f"🎯 Target: Google Student Ambassador presentation")
+        print(f"⚠️  Note: Requests spread over ~{num_students * 2.5 / 60:.1f} minutes to avoid rate limiting")
         print("=" * 70)
         
         self.running = True
