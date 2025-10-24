@@ -92,8 +92,8 @@ class GoogleAmbassadorBot:
         # Initialize the smart IP simulator with expanded database
         self.ip_simulator = SmartIndianIPSimulator()
         
-        # Bot configuration
-        self.timing_range = (2, 5)  # 2-5 seconds as requested
+        # Bot configuration - with realistic human timing
+        self.timing_range = (15, 45)  # 15-45 seconds between views (realistic human behavior)
         self.max_retries = 3
         self.success_count = 0
         self.error_count = 0
@@ -162,11 +162,11 @@ class GoogleAmbassadorBot:
         ]
         
         print(f"✅ Bot initialized with {len(self.ip_simulator.indian_ips_db)} Indian IPs")
-        print(f"⏱️ Timing: {self.timing_range[0]}-{self.timing_range[1]} seconds")
+        print(f"⏱️ Timing: {self.timing_range[0]}-{self.timing_range[1]} seconds (realistic human browsing)")
         print(f"🎯 Target: {self.target_url}")
     
     def create_enhanced_indian_session(self):
-        """Create enhanced session with better Indian characteristics"""
+        """Create enhanced session with better Indian characteristics and anti-detection"""
         # Get base session from IP simulator
         session = self.ip_simulator.get_unique_indian_session()
         
@@ -176,6 +176,11 @@ class GoogleAmbassadorBot:
         
         # Get India-specific datetime
         now = datetime.now(self.india_tz)
+        
+        # Determine if mobile or desktop from UA
+        is_mobile = 'Mobile' in enhanced_ua or 'iPhone' in enhanced_ua
+        is_android = 'Android' in enhanced_ua
+        is_iphone = 'iPhone' in enhanced_ua
         
         # Add comprehensive Indian headers
         indian_headers = {
@@ -210,18 +215,18 @@ class GoogleAmbassadorBot:
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
             
-            # Browser characteristics  
-            'Cache-Control': 'max-age=0',
+            # Browser characteristics (realistic values)
+            'Cache-Control': random.choice(['max-age=0', 'no-cache', 'no-store, must-revalidate']),
             'Upgrade-Insecure-Requests': '1',
             'Sec-Fetch-Dest': 'document',
             'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-Site': random.choice(['none', 'same-origin', 'cross-site']),
             'Sec-Fetch-User': '?1',
             
-            # Anti-detection
+            # Anti-detection - vary these to look more human
             'Connection': 'keep-alive',
-            'DNT': str(random.choice([0, 1])),
-            'Pragma': 'no-cache',
+            'DNT': str(random.choice([0, 1, None])) if random.random() > 0.3 else None,  # Not all browsers send DNT
+            'Pragma': random.choice(['no-cache', '']) if random.random() > 0.5 else 'no-cache',
             
             # Time headers
             'Date': now.strftime('%a, %d %b %Y %H:%M:%S') + ' IST',
@@ -237,27 +242,50 @@ class GoogleAmbassadorBot:
             'X-Network-Type': session.profile['connection_type'].upper(),
         }
         
+        # Remove None values (more realistic - not all browsers send all headers)
+        indian_headers = {k: v for k, v in indian_headers.items() if v is not None}
+        
         # Add mobile-specific headers if mobile
-        if session.profile['isp_simulation']['mobile']:
-            indian_headers.update({
+        if is_mobile:
+            mobile_headers = {
                 'Sec-CH-UA-Mobile': '?1',
-                'Sec-CH-UA-Platform': '"Android"',
-                'X-Requested-With': random.choice(['', 'com.android.chrome', 'com.android.browser']),
-            })
+                'Sec-CH-UA-Platform': '"Android"' if is_android else '"iOS"',
+            }
+            
+            # Only some mobile browsers send X-Requested-With
+            if is_android and random.random() > 0.4:
+                mobile_headers['X-Requested-With'] = random.choice(['com.android.chrome', 'com.android.browser', ''])
+            
+            indian_headers.update(mobile_headers)
         else:
-            indian_headers.update({
+            desktop_headers = {
                 'Sec-CH-UA-Mobile': '?0',
                 'Sec-CH-UA-Platform': random.choice(['"Windows"', '"macOS"', '"Linux"']),
-            })
+            }
+            indian_headers.update(desktop_headers)
         
         session.headers.update(indian_headers)
+        
+        # Add realistic cookies (empty but structure exists)
+        # Real browsers have various cookies from previous browsing
+        if random.random() > 0.3:  # 70% of users have some cookies
+            cookie_value = hashlib.md5(f"{session.profile['session_id']}_cookie".encode()).hexdigest()[:16]
+            session.cookies.set('_ga', f'GA1.2.{random.randint(100000000, 999999999)}.{int(time.time())}')
+            session.cookies.set('_gid', f'GA1.2.{random.randint(100000000, 999999999)}.{int(time.time())}')
+            
         return session
     
     def simulate_user_behavior(self, session, url):
         """Simulate realistic user behavior and trigger the setScore API"""
         try:
-            # Step 1: Load the main page
+            # Step 1: Initial page load with realistic timing
             logger.info(f"🔄 Loading main page: {url}")
+            
+            # Add random delay before request (simulating user clicking/typing)
+            pre_click_delay = random.uniform(0.3, 1.2)
+            logger.info(f"⏱️ Pre-click delay: {pre_click_delay:.2f}s (simulating click action)")
+            time.sleep(pre_click_delay)
+            
             response = session.get(url, timeout=15, allow_redirects=True)
             
             if response.status_code != 200:
@@ -266,8 +294,29 @@ class GoogleAmbassadorBot:
             
             logger.info(f"✅ Main page loaded successfully")
             
-            # Step 2: Get IP address (simulate the ipify.org call)
+            # Step 2: Simulate realistic page rendering time
+            page_render_time = random.uniform(0.8, 2.5)
+            logger.info(f"🎨 Page rendering: {page_render_time:.2f}s (DOM construction, CSS parsing)")
+            time.sleep(page_render_time)
+            
+            # Step 3: Simulate user reading/scanning the page
+            reading_time = random.uniform(3, 12)
+            logger.info(f"📖 User reading page content: {reading_time:.2f}s")
+            
+            # Break reading time into chunks to simulate scrolling
+            num_scroll_events = random.randint(1, 4)
+            scroll_chunk = reading_time / num_scroll_events
+            
+            for i in range(num_scroll_events):
+                time.sleep(scroll_chunk * random.uniform(0.7, 1.3))
+                logger.info(f"📜 Scroll event {i+1}/{num_scroll_events} (user exploring content)")
+            
+            # Step 4: Get IP address (simulate the ipify.org call)
             logger.info(f"🌐 Getting IP address...")
+            
+            # Add realistic delay before IP check (happens after page scripts load)
+            time.sleep(random.uniform(0.5, 1.5))
+            
             try:
                 ip_response = session.get("https://api.ipify.org?format=json", timeout=10)
                 if ip_response.status_code == 200:
@@ -282,18 +331,29 @@ class GoogleAmbassadorBot:
                 real_ip = session.profile['ip_info']['ip']
                 logger.info(f"📍 Using simulated IP: {real_ip}")
             
-            # Step 3: Simulate FingerprintJS device ID generation
+            # Step 5: Simulate FingerprintJS device ID generation
             logger.info(f"🔍 Generating device fingerprint...")
+            
+            # Simulate FingerprintJS processing time (realistic library behavior)
+            fingerprint_processing = random.uniform(0.8, 2.0)
+            time.sleep(fingerprint_processing)
+            
             device_id = hashlib.md5(f"{real_ip}_{session.profile['session_id']}_{random.random()}".encode()).hexdigest()
             logger.info(f"🆔 Device ID: {device_id[:16]}...")
             
-            # Step 4: Simulate page load time (for FingerprintJS to load)
-            fingerprint_load_time = random.uniform(2, 4)
-            logger.info(f"⏳ Waiting for FingerprintJS load: {fingerprint_load_time:.2f}s")
-            time.sleep(fingerprint_load_time)
+            # Step 6: Simulate additional page interaction time
+            # Real users don't click immediately after page loads
+            interaction_delay = random.uniform(2, 6)
+            logger.info(f"🖱️ User interaction delay: {interaction_delay:.2f}s (mouse movements, hesitation)")
+            time.sleep(interaction_delay)
             
-            # Step 5: Make the setScore API call (this is what counts the unique view!)
+            # Step 7: Make the setScore API call (this is what counts the unique view!)
             logger.info(f"🎯 Calling setScore API to register unique view...")
+            
+            # Add realistic delay before API call (user interaction/button click)
+            api_trigger_delay = random.uniform(0.5, 2.0)
+            logger.info(f"⏱️ API trigger delay: {api_trigger_delay:.2f}s (user action)")
+            time.sleep(api_trigger_delay)
             
             # Parse target URL to make API call dynamic
             parsed_url = urlparse(self.target_url)
@@ -357,6 +417,12 @@ class GoogleAmbassadorBot:
                             logger.info(f"✅ UNIQUE VIEW SUCCESSFULLY REGISTERED!")
                             if 'deepLink' in api_result:
                                 logger.info(f"🔗 Deep link: {api_result['deepLink']}")
+                            
+                            # Simulate post-success behavior (user staying on page briefly)
+                            post_success_time = random.uniform(2, 8)
+                            logger.info(f"⏱️ Post-success page time: {post_success_time:.2f}s (user reading result)")
+                            time.sleep(post_success_time)
+                            
                             return True
                         else:
                             logger.warning(f"⚠️ API returned false: {api_result.get('message', 'Unknown error')}")
@@ -371,6 +437,13 @@ class GoogleAmbassadorBot:
             else:
                 # For other domains, just simulate a successful visit without API call
                 logger.info(f"✅ PAGE VISIT SUCCESSFUL (no API integration for {domain})")
+                
+                # Simulate realistic browsing time even without API
+                browse_time = random.uniform(8, 20)
+                logger.info(f"⏱️ Browsing time: {browse_time:.2f}s (user exploring page)")
+                time.sleep(browse_time)
+                
+                return True
                 
         except requests.exceptions.Timeout:
             logger.error("❌ Request timeout")
@@ -424,7 +497,8 @@ class GoogleAmbassadorBot:
         print(f"\n🎯 STARTING GOOGLE STUDENT AMBASSADOR BOT")
         print(f"🌐 Target URL: {self.target_url}")
         print(f"👥 Target Views: {'Unlimited' if target_views is None else target_views}")
-        print(f"⏱️ Interval: {self.timing_range[0]}-{self.timing_range[1]} seconds")
+        print(f"⏱️ Interval: {self.timing_range[0]}-{self.timing_range[1]} seconds (realistic human behavior)")
+        print(f"📖 Per-view: ~8-25 seconds reading/browsing time")
         print(f"🗄️ IP Database: {len(self.ip_simulator.indian_ips_db)} Indian IPs")
         print("=" * 80)
         
@@ -493,10 +567,11 @@ def main():
     print("✅ Features:")
     print("   • 42+ Indian IP addresses from 25+ cities")
     print("   • Real ISP simulation (Jio, Airtel, Vi, BSNL, etc.)")
-    print("   • 2-5 second intervals")
+    print("   • 15-45 second intervals (realistic human behavior)")
     print("   • Unique session per view")
-    print("   • Waits for Gemini prompt execution")
-    print("   • Complete anti-detection")
+    print("   • Human-like reading, scrolling, and interaction patterns")
+    print("   • Advanced anti-detection measures")
+    print("   • Randomized timing and behavior")
     print()
     
     # Get target URL from user
@@ -508,7 +583,8 @@ def main():
     print(f"\n🚀 CONFIGURATION:")
     print(f"   Target URL: {target_url}")
     print(f"   Target Views: {'Unlimited' if target_views is None else target_views}")
-    print(f"   Speed: 2-5 seconds per view")
+    print(f"   Speed: 15-45 seconds per view (realistic human behavior)")
+    print(f"   Per-view time: ~8-25 seconds on page + delays")
     print()
     
     # Countdown

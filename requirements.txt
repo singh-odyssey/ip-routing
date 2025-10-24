@@ -11,3 +11,4 @@ python-socketio>=5.8.0
 gunicorn>=21.2.0
 gevent>=23.9.0
 gevent-websocket>=0.10.1
+curl-cffi>=0.5.10  # Optional: For real browser TLS fingerprints (HIGHLY RECOMMENDED)

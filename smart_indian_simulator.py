@@ -313,8 +313,20 @@ class SmartIndianIPSimulator:
         """Create a requests session based on the profile"""
         session = requests.Session()
         
+        # Try to use proxy if available
+        try:
+            from proxy_config import get_proxy_for_session
+            proxy_config = get_proxy_for_session()
+            if proxy_config:
+                session.proxies.update(proxy_config)
+                print(f"🔒 Using proxy for enhanced stealth")
+        except ImportError:
+            pass  # proxy_config not available, continue without proxies
+        except Exception as e:
+            print(f"⚠️ Proxy configuration error (continuing without proxy): {e}")
+        
         # Check if we can use a working proxy for this IP
-        proxy_available = False
+        proxy_available = session.proxies is not None and len(session.proxies) > 0
         
         # For testing, we'll simulate different session characteristics
         # without actually using proxies (since most are unreliable)
