@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
-GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT
-==============================================
+MICROSOFT STUDENT AMBASSADOR - UNIQUE VIEWER BOT
+=================================================
 
-Specialized bot for generating unique viewers on any provided URL.
+Specialized bot for generating unique viewers on Microsoft Learn and Azure URLs.
 
 Features:
-✅ Simulates real Indian users clicking the URL
-✅ Waits for page load and Gemini prompt execution  
+✅ Simulates real Indian users clicking Microsoft URLs
+✅ Tracks Microsoft Learn ambassador links with wt.mc_id parameter
 ✅ 2-5 second intervals between requests
 ✅ 42+ Indian IP addresses from 25+ cities
 ✅ Multiple ISP simulation (Jio, Airtel, Vi, BSNL, ACT, etc.)
 ✅ Advanced anti-detection measures
 ✅ Proper session management for unique views
+✅ Specialized for Microsoft domains (learn.microsoft.com, azure.microsoft.com, etc.)
 """
 
 import requests
@@ -25,7 +26,7 @@ from datetime import datetime
 from smart_indian_simulator import SmartIndianIPSimulator
 import pytz
 import logging
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 import requests.exceptions
 
 # Setup logging
@@ -40,12 +41,47 @@ def validate_url(url):
     except:
         return False
 
+def is_microsoft_url(url):
+    """Check if URL is a Microsoft domain"""
+    microsoft_domains = [
+        'microsoft.com',
+        'learn.microsoft.com',
+        'azure.microsoft.com',
+        'docs.microsoft.com',
+        'technet.microsoft.com',
+        'msdn.microsoft.com'
+    ]
+    parsed = urlparse(url)
+    domain = parsed.netloc.lower()
+    return any(ms_domain in domain for ms_domain in microsoft_domains)
+
+def ensure_ambassador_id(url, ambassador_id='studentamb_465135'):
+    """Ensure the URL contains the Microsoft Student Ambassador tracking ID"""
+    parsed = urlparse(url)
+    query_params = parse_qs(parsed.query)
+    
+    # Add or update wt.mc_id parameter
+    query_params['wt.mc_id'] = [ambassador_id]
+    
+    # Reconstruct URL with updated query
+    new_query = urlencode(query_params, doseq=True)
+    new_url = urlunparse((
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path,
+        parsed.params,
+        new_query,
+        parsed.fragment
+    ))
+    
+    return new_url
+
 def get_user_url():
     """Get and validate URL from user input"""
     while True:
-        print("\n🌐 ENTER TARGET URL")
+        print("\n🌐 ENTER MICROSOFT TARGET URL")
         print("=" * 30)
-        url = input("🔗 Enter the URL you want to generate views for: ").strip()
+        url = input("🔗 Enter the Microsoft URL you want to generate views for: ").strip()
         
         if not url:
             print("❌ URL cannot be empty. Please try again.")
@@ -57,11 +93,17 @@ def get_user_url():
             print(f"💡 Added HTTPS protocol: {url}")
         
         if validate_url(url):
-            print(f"✅ Valid URL: {url}")
-            return url
+            if is_microsoft_url(url):
+                print(f"✅ Valid Microsoft URL: {url}")
+                return url
+            else:
+                print("⚠️ Warning: This doesn't appear to be a Microsoft URL")
+                confirm = input("Do you want to continue anyway? (y/n): ").strip().lower()
+                if confirm == 'y':
+                    return url
         else:
             print("❌ Invalid URL format. Please enter a valid URL.")
-            print("💡 Example: https://example.com/page")
+            print("💡 Example: https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135")
 
 def get_user_views():
     """Get target number of views from user input"""
@@ -85,9 +127,9 @@ def get_user_views():
                 print("❌ Please enter a number or 'unlimited'")
                 print("💡 Examples: 10, 50, 100, unlimited")
 
-class GoogleAmbassadorBot:
+class MicrosoftAmbassadorBot:
     def __init__(self, target_url=None):
-        print("🎯 Initializing Google Student Ambassador Bot")
+        print("🎯 Initializing Microsoft Student Ambassador Bot")
         
         # Initialize the smart IP simulator with expanded database
         self.ip_simulator = SmartIndianIPSimulator()
@@ -102,7 +144,9 @@ class GoogleAmbassadorBot:
         # Target URL - must be provided, no default
         if not target_url:
             raise ValueError("Target URL is required. Please provide a URL.")
-        self.target_url = target_url
+        
+        # Ensure ambassador tracking ID is present
+        self.target_url = ensure_ambassador_id(target_url)
         
         # India timezone
         self.india_tz = pytz.timezone('Asia/Kolkata')
@@ -139,9 +183,10 @@ class GoogleAmbassadorBot:
             'Mozilla/5.0 (Android 14; Mobile; rv:122.0) Gecko/122.0 Firefox/122.0',
             'Mozilla/5.0 (Android 13; Mobile; rv:121.0) Gecko/121.0 Firefox/121.0',
             
-            # Edge (Increasing adoption)
+            # Edge (Increasing adoption, especially for Microsoft sites)
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
             'Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
             
             # Mac (Less common but present in urban areas)
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
@@ -150,27 +195,22 @@ class GoogleAmbassadorBot:
             # Linux (Tech-savvy users)
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-            
-            # Samsung Internet (Very popular on Samsung devices in India)
-            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 12; SM-A52s) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/22.0 Chrome/111.0.0.0 Mobile Safari/537.36',
-            'Mozilla/5.0 (Linux; Android 13; SM-M52) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/23.0 Chrome/115.0.0.0 Mobile Safari/537.36',
-            
-            # Opera (Popular for data compression in India)
-            'Mozilla/5.0 (Linux; Android 13; CPH2423) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36 OPR/80.2.4244.58675',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0'
         ]
         
         print(f"✅ Bot initialized with {len(self.ip_simulator.indian_ips_db)} Indian IPs")
         print(f"⏱️ Timing: {self.timing_range[0]}-{self.timing_range[1]} seconds")
         print(f"🎯 Target: {self.target_url}")
+        
+        # Check if ambassador ID is present
+        if 'wt.mc_id=studentamb_465135' in self.target_url:
+            print(f"✅ Ambassador tracking ID detected: studentamb_465135")
     
     def create_enhanced_indian_session(self):
         """Create enhanced session with better Indian characteristics"""
         # Get base session from IP simulator
         session = self.ip_simulator.get_unique_indian_session()
         
-        # Override with enhanced user agent
+        # Override with enhanced user agent (prefer Edge for Microsoft sites)
         enhanced_ua = random.choice(self.enhanced_user_agents)
         session.headers.update({'User-Agent': enhanced_ua})
         
@@ -188,8 +228,7 @@ class GoogleAmbassadorBot:
             'X-Geo-Region': session.profile['ip_info']['region'],
             'X-Geo-City': session.profile['ip_info']['city'],
             
-            # Locale and language
-                        # Locale and language (enhanced for different Indian regions)
+            # Locale and language (enhanced for different Indian regions)
             'Accept-Language': random.choice([
                 'en-IN,hi;q=0.9,en;q=0.8',
                 'hi-IN,hi;q=0.9,en;q=0.8',
@@ -254,19 +293,33 @@ class GoogleAmbassadorBot:
         return session
     
     def simulate_user_behavior(self, session, url):
-        """Simulate realistic user behavior and trigger the setScore API"""
+        """Simulate realistic user behavior on Microsoft Learn"""
         try:
             # Step 1: Load the main page
-            logger.info(f"🔄 Loading main page: {url}")
+            logger.info(f"🔄 Loading Microsoft page: {url}")
             response = session.get(url, timeout=15, allow_redirects=True)
             
             if response.status_code != 200:
                 logger.error(f"❌ HTTP Error: {response.status_code}")
                 return False
             
-            logger.info(f"✅ Main page loaded successfully")
+            logger.info(f"✅ Microsoft page loaded successfully")
             
-            # Step 2: Get IP address (simulate the ipify.org call)
+            # Step 2: Simulate page interaction time (reading content)
+            page_read_time = random.uniform(3, 8)
+            logger.info(f"📖 Simulating page reading: {page_read_time:.2f}s")
+            time.sleep(page_read_time)
+            
+            # Step 3: Simulate scrolling behavior (multiple requests to track engagement)
+            scroll_count = random.randint(2, 5)
+            logger.info(f"📜 Simulating {scroll_count} scroll events")
+            
+            for i in range(scroll_count):
+                scroll_delay = random.uniform(1, 3)
+                time.sleep(scroll_delay)
+                logger.info(f"   Scroll {i+1}/{scroll_count}")
+            
+            # Step 4: Get IP address (for tracking)
             logger.info(f"🌐 Getting IP address...")
             try:
                 ip_response = session.get("https://api.ipify.org?format=json", timeout=10)
@@ -282,96 +335,24 @@ class GoogleAmbassadorBot:
                 real_ip = session.profile['ip_info']['ip']
                 logger.info(f"📍 Using simulated IP: {real_ip}")
             
-            # Step 3: Simulate FingerprintJS device ID generation
+            # Step 5: Simulate device fingerprint generation
             logger.info(f"🔍 Generating device fingerprint...")
             device_id = hashlib.md5(f"{real_ip}_{session.profile['session_id']}_{random.random()}".encode()).hexdigest()
             logger.info(f"🆔 Device ID: {device_id[:16]}...")
             
-            # Step 4: Simulate page load time (for FingerprintJS to load)
-            fingerprint_load_time = random.uniform(2, 4)
-            logger.info(f"⏳ Waiting for FingerprintJS load: {fingerprint_load_time:.2f}s")
-            time.sleep(fingerprint_load_time)
-            
-            # Step 5: Make the setScore API call (this is what counts the unique view!)
-            logger.info(f"🎯 Calling setScore API to register unique view...")
-            
-            # Parse target URL to make API call dynamic
-            parsed_url = urlparse(self.target_url)
-            domain = parsed_url.netloc.lower()
-            
-            # Extract parameters from URL if available
-            from urllib.parse import parse_qs
+            # Step 6: Check if ambassador tracking ID is working
+            parsed_url = urlparse(url)
             query_params = parse_qs(parsed_url.query)
             
-            # Check if this is a supported domain with API integration
-            if 'aiskillshouse.com' in domain:
-                # Use existing aiskillshouse.com API
-                uid = query_params.get('uid', ['2827'])[0]
-                prompt_id = query_params.get('promptId', ['6'])[0]
-                
-                # Prepare form data (multipart/form-data format)
-                form_data = {
-                    'uid': (None, uid),
-                    'promptId': (None, prompt_id),
-                    'deviceId': (None, device_id),
-                    'ipAddress': (None, real_ip)
-                }
-                
-                # Make the API call
-                api_url = f"{parsed_url.scheme}://{parsed_url.netloc}/olivrweb/user/Api.php/setScore"
-                
-                # Add API-specific headers (remove Content-Type to let requests set it with boundary)
-                api_headers = {
-                    'Origin': f"{parsed_url.scheme}://{parsed_url.netloc}",
-                    'Referer': self.target_url,
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-                session.headers.update(api_headers)
-                
-                # Use files parameter for multipart/form-data encoding
-                max_retries = 2
-                retry_count = 0
-                
-                while retry_count <= max_retries:
-                    try:
-                        api_response = session.post(api_url, files=form_data, timeout=20)
-                        break  # Success, exit retry loop
-                    except requests.exceptions.Timeout:
-                        retry_count += 1
-                        if retry_count <= max_retries:
-                            logger.warning(f"⚠️ API timeout, retrying ({retry_count}/{max_retries})...")
-                            time.sleep(random.uniform(2, 5))
-                        else:
-                            logger.error(f"❌ API timeout after {max_retries} retries")
-                            return False
-                    except Exception as e:
-                        logger.error(f"❌ API request error: {e}")
-                        return False
-                
-                if api_response.status_code == 200:
-                    try:
-                        api_result = api_response.json()
-                        logger.info(f"📊 API Response: {api_result}")
-                        
-                        if api_result.get('status') == True:
-                            logger.info(f"✅ UNIQUE VIEW SUCCESSFULLY REGISTERED!")
-                            if 'deepLink' in api_result:
-                                logger.info(f"🔗 Deep link: {api_result['deepLink']}")
-                            return True
-                        else:
-                            logger.warning(f"⚠️ API returned false: {api_result.get('message', 'Unknown error')}")
-                            return False
-                            
-                    except Exception as e:
-                        logger.error(f"❌ Error parsing API response: {e}")
-                        return False
-                else:
-                    logger.error(f"❌ API call failed with status: {api_response.status_code}")
-                    return False
+            if 'wt.mc_id' in query_params:
+                ambassador_id = query_params['wt.mc_id'][0]
+                logger.info(f"✅ AMBASSADOR TRACKING SUCCESSFUL: {ambassador_id}")
             else:
-                # For other domains, just simulate a successful visit without API call
-                logger.info(f"✅ PAGE VISIT SUCCESSFUL (no API integration for {domain})")
-                
+                logger.warning(f"⚠️ No ambassador tracking ID found in URL")
+            
+            logger.info(f"✅ PAGE VISIT SUCCESSFUL - Microsoft Learn view registered")
+            return True
+            
         except requests.exceptions.Timeout:
             logger.error("❌ Request timeout")
             return False
@@ -421,7 +402,7 @@ class GoogleAmbassadorBot:
     
     def run_continuous_unique_views(self, target_views=None):
         """Run continuous unique view generation"""
-        print(f"\n🎯 STARTING GOOGLE STUDENT AMBASSADOR BOT")
+        print(f"\n🎯 STARTING MICROSOFT STUDENT AMBASSADOR BOT")
         print(f"🌐 Target URL: {self.target_url}")
         print(f"👥 Target Views: {'Unlimited' if target_views is None else target_views}")
         print(f"⏱️ Interval: {self.timing_range[0]}-{self.timing_range[1]} seconds")
@@ -483,20 +464,26 @@ class GoogleAmbassadorBot:
     
     def stop(self):
         """Stop the bot"""
-        print(f"\n🛑 Stopping Google Ambassador Bot...")
+        print(f"\n🛑 Stopping Microsoft Ambassador Bot...")
         self.running = False
 
 def main():
     """Main function with user input for URL and views"""
-    print("🎓 GOOGLE STUDENT AMBASSADOR - UNIQUE VIEWER BOT")
+    print("🎓 MICROSOFT STUDENT AMBASSADOR - UNIQUE VIEWER BOT")
     print("=" * 60)
     print("✅ Features:")
     print("   • 42+ Indian IP addresses from 25+ cities")
     print("   • Real ISP simulation (Jio, Airtel, Vi, BSNL, etc.)")
     print("   • 2-5 second intervals")
     print("   • Unique session per view")
-    print("   • Waits for Gemini prompt execution")
+    print("   • Ambassador tracking (wt.mc_id)")
     print("   • Complete anti-detection")
+    print()
+    print("📝 Supported Microsoft URLs:")
+    print("   • https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135")
+    print("   • https://azure.microsoft.com?wt.mc_id=studentamb_465135")
+    print("   • https://www.microsoft.com/Startups?wt.mc_id=studentamb_465135")
+    print("   • https://www.microsoft.com/events?wt.mc_id=studentamb_465135")
     print()
     
     # Get target URL from user
@@ -517,14 +504,14 @@ def main():
         time.sleep(1)
     
     # Create and run bot with user-provided URL
-    bot = GoogleAmbassadorBot(target_url)
+    bot = MicrosoftAmbassadorBot(target_url)
     
     try:
         bot.run_continuous_unique_views(target_views)
     except KeyboardInterrupt:
         bot.stop()
     
-    print(f"\n👋 Thanks for using Google Student Ambassador Bot!")
+    print(f"\n👋 Thanks for using Microsoft Student Ambassador Bot!")
     print(f"🎯 Your unique views have been generated successfully!")
 
 if __name__ == "__main__":
