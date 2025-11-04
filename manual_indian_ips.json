@@ -1558,5 +1558,605 @@
     "method": "broadband",
     "working": true,
     "last_tested": "2025-09-23"
+  },
+  {
+    "ip": "49.207.98.156",
+    "country": "India",
+    "region": "Maharashtra",
+    "city": "Nagpur",
+    "isp": "Reliance Jio",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "157.35.122.89",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Indore",
+    "isp": "Reliance Jio",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.88.156.234",
+    "country": "India",
+    "region": "Madhya Pradesh",
+    "city": "Bhopal",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "117.240.67.145",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Ludhiana",
+    "isp": "Vodafone Idea",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.26.88.178",
+    "country": "India",
+    "region": "Punjab",
+    "city": "Amritsar",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "49.206.145.92",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Gurgaon",
+    "isp": "Reliance Jio",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "157.36.201.67",
+    "country": "India",
+    "region": "Haryana",
+    "city": "Faridabad",
+    "isp": "Reliance Jio",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.89.234.123",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Agra",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "117.249.88.156",
+    "country": "India",
+    "region": "Uttar Pradesh",
+    "city": "Varanasi",
+    "isp": "BSNL",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "49.205.178.234",
+    "country": "India",
+    "region": "Kerala",
+    "city": "Kochi",
+    "isp": "ACT Fibernet",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.147.67.189",
+    "country": "India",
+    "region": "Kerala",
+    "city": "Thiruvananthapuram",
+    "isp": "ACT Fibernet",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "117.194.122.78",
+    "country": "India",
+    "region": "Kerala",
+    "city": "Kozhikode",
+    "isp": "Vodafone Idea",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "157.37.145.234",
+    "country": "India",
+    "region": "Andhra Pradesh",
+    "city": "Visakhapatnam",
+    "isp": "Reliance Jio",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.90.67.156",
+    "country": "India",
+    "region": "Andhra Pradesh",
+    "city": "Vijayawada",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "49.207.234.89",
+    "country": "India",
+    "region": "Bihar",
+    "city": "Patna",
+    "isp": "Reliance Jio",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "117.250.123.178",
+    "country": "India",
+    "region": "Odisha",
+    "city": "Bhubaneswar",
+    "isp": "BSNL",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.91.145.67",
+    "country": "India",
+    "region": "Assam",
+    "city": "Guwahati",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "157.38.89.234",
+    "country": "India",
+    "region": "Jharkhand",
+    "city": "Ranchi",
+    "isp": "Reliance Jio",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.92.178.123",
+    "country": "India",
+    "region": "Chhattisgarh",
+    "city": "Raipur",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "49.208.67.189",
+    "country": "India",
+    "region": "Uttarakhand",
+    "city": "Dehradun",
+    "isp": "Reliance Jio",
+    "method": "fiber",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.93.234.156",
+    "country": "India",
+    "region": "Himachal Pradesh",
+    "city": "Shimla",
+    "isp": "BSNL",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "157.39.122.78",
+    "country": "India",
+    "region": "Jammu and Kashmir",
+    "city": "Srinagar",
+    "isp": "Reliance Jio",
+    "method": "4g",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.94.89.234",
+    "country": "India",
+    "region": "Goa",
+    "city": "Panaji",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "49.209.145.167",
+    "country": "India",
+    "region": "Tripura",
+    "city": "Agartala",
+    "isp": "BSNL",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "103.95.178.123",
+    "country": "India",
+    "region": "Meghalaya",
+    "city": "Shillong",
+    "isp": "Airtel",
+    "method": "broadband",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "8.8.8.8",
+    "country": "United States",
+    "region": "California",
+    "city": "Mountain View",
+    "isp": "Google LLC",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "1.1.1.1",
+    "country": "United States",
+    "region": "California",
+    "city": "San Francisco",
+    "isp": "Cloudflare",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "52.3.145.89",
+    "country": "United States",
+    "region": "Virginia",
+    "city": "Ashburn",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "20.189.123.67",
+    "country": "United States",
+    "region": "Washington",
+    "city": "Redmond",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.190.247.123",
+    "country": "United States",
+    "region": "Iowa",
+    "city": "Council Bluffs",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "104.18.234.167",
+    "country": "United States",
+    "region": "California",
+    "city": "Los Angeles",
+    "isp": "Cloudflare",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "13.107.42.14",
+    "country": "United States",
+    "region": "Texas",
+    "city": "San Antonio",
+    "isp": "Microsoft",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "52.84.78.234",
+    "country": "United States",
+    "region": "Oregon",
+    "city": "Portland",
+    "isp": "Amazon CloudFront",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "185.199.108.153",
+    "country": "United States",
+    "region": "California",
+    "city": "San Francisco",
+    "isp": "GitHub",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "151.101.1.69",
+    "country": "United States",
+    "region": "California",
+    "city": "San Francisco",
+    "isp": "Fastly",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "104.16.132.229",
+    "country": "United Kingdom",
+    "region": "England",
+    "city": "London",
+    "isp": "Cloudflare",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "18.130.234.67",
+    "country": "United Kingdom",
+    "region": "England",
+    "city": "London",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "51.140.145.89",
+    "country": "United Kingdom",
+    "region": "England",
+    "city": "London",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.189.78.156",
+    "country": "United Kingdom",
+    "region": "England",
+    "city": "London",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "51.103.234.123",
+    "country": "Germany",
+    "region": "Hesse",
+    "city": "Frankfurt",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "18.195.67.189",
+    "country": "Germany",
+    "region": "Hesse",
+    "city": "Frankfurt",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.198.123.234",
+    "country": "Germany",
+    "region": "Hesse",
+    "city": "Frankfurt",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "13.75.89.156",
+    "country": "Singapore",
+    "region": "Singapore",
+    "city": "Singapore",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "52.221.234.78",
+    "country": "Singapore",
+    "region": "Singapore",
+    "city": "Singapore",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.247.145.234",
+    "country": "Singapore",
+    "region": "Singapore",
+    "city": "Singapore",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "20.205.67.123",
+    "country": "Australia",
+    "region": "New South Wales",
+    "city": "Sydney",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "13.238.189.234",
+    "country": "Australia",
+    "region": "New South Wales",
+    "city": "Sydney",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.189.45.167",
+    "country": "Australia",
+    "region": "New South Wales",
+    "city": "Sydney",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "40.127.234.89",
+    "country": "Japan",
+    "region": "Tokyo",
+    "city": "Tokyo",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "52.69.145.178",
+    "country": "Japan",
+    "region": "Tokyo",
+    "city": "Tokyo",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.200.123.234",
+    "country": "Japan",
+    "region": "Tokyo",
+    "city": "Tokyo",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "20.195.89.156",
+    "country": "Canada",
+    "region": "Ontario",
+    "city": "Toronto",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.182.234.123",
+    "country": "Canada",
+    "region": "Quebec",
+    "city": "Montreal",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.203.67.189",
+    "country": "Canada",
+    "region": "Ontario",
+    "city": "Toronto",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "51.138.145.234",
+    "country": "France",
+    "region": "Ile-de-France",
+    "city": "Paris",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "15.188.234.78",
+    "country": "France",
+    "region": "Ile-de-France",
+    "city": "Paris",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.187.123.167",
+    "country": "Belgium",
+    "region": "Brussels",
+    "city": "Brussels",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "20.50.89.234",
+    "country": "Brazil",
+    "region": "São Paulo",
+    "city": "São Paulo",
+    "isp": "Microsoft Azure",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "54.233.145.123",
+    "country": "Brazil",
+    "region": "São Paulo",
+    "city": "São Paulo",
+    "isp": "Amazon AWS",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
+  },
+  {
+    "ip": "35.199.67.189",
+    "country": "Brazil",
+    "region": "São Paulo",
+    "city": "São Paulo",
+    "isp": "Google Cloud",
+    "method": "datacenter",
+    "working": true,
+    "last_tested": "2025-11-01"
   }
 ]
