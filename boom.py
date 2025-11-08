@@ -1,25 +1,17 @@
 #!/usr/bin/env python3
 """
-Tor-Routed HTTP Load Testing Script
+Direct HTTP Load Testing Script
 WARNING: For testing YOUR OWN applications only
+WARNING: Uses your REAL IP address - no anonymity!
 """
 import requests
 import time
 import random
-import subprocess
 import threading
 from collections import defaultdict
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
-from stem import Signal
-from stem.control import Controller
-
-# Tor configuration
-TOR_PROXY_HOST = "127.0.0.1"
-TOR_PROXY_PORT = 9050
-TOR_CONTROL_PORT = 9051
-TOR_PASSWORD = ""
 
 # Large pool of realistic user agents (latest versions, diverse platforms)
 USER_AGENTS = [
@@ -72,40 +64,6 @@ REFERRERS = [
     "",  # Direct navigation
 ]
 
-def ensure_tor_running():
-    """Ensure Tor service is running"""
-    try:
-        result = subprocess.run(['pgrep', '-x', 'tor'], capture_output=True)
-        if result.returncode != 0:
-            print("⚠️  Tor is not running. Starting Tor...")
-            subprocess.run(['sudo', 'pkill', '-9', 'tor'], stderr=subprocess.DEVNULL)
-            time.sleep(1)
-            subprocess.Popen(['sudo', 'tor'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            print("⏳ Waiting for Tor to start...")
-            time.sleep(5)
-            result = subprocess.run(['pgrep', '-x', 'tor'], capture_output=True)
-            if result.returncode == 0:
-                print("✅ Tor started successfully")
-                return True
-            else:
-                print("❌ Failed to start Tor")
-                return False
-        return True
-    except Exception as e:
-        print(f"⚠️  Could not check/start Tor: {e}")
-        return True
-
-def renew_tor_circuit():
-    """Request new Tor circuit to change IP"""
-    try:
-        with Controller.from_port(port=TOR_CONTROL_PORT) as controller:
-            controller.authenticate(password=TOR_PASSWORD)
-            controller.signal(Signal.NEWNYM)
-            time.sleep(0.5)  # Reduced delay for faster IP rotation
-            return True
-    except Exception as e:
-        return False
-
 def get_random_headers():
     """Generate randomized HTTP headers for better anonymity"""
     headers = {
@@ -134,33 +92,18 @@ def get_random_headers():
     
     return headers
 
-def make_request(url: str, method: str = "GET", timeout: int = 10, use_tor: bool = True, request_num: int = 0, rotate_every: int = 10, session: Optional[requests.Session] = None) -> dict:
-    """Make a single HTTP request through Tor with randomized headers and IP rotation"""
+def make_request(url: str, method: str = "GET", timeout: int = 10, request_num: int = 0, session: Optional[requests.Session] = None) -> dict:
+    """Make a single HTTP request directly (no proxy) with randomized headers"""
     start_time = time.time()
-    
-    # Rotate IP every N requests (reduced wait time)
-    if use_tor and request_num > 0 and request_num % rotate_every == 0:
-        try:
-            renew_tor_circuit()
-            time.sleep(0.3)  # Minimal wait for new circuit
-        except:
-            pass  # Continue even if circuit renewal fails
     
     try:
         # Reuse session if provided, otherwise create new one
         if session is None:
             session = requests.session()
-            
-            if use_tor:
-                session.proxies = {
-                    'http': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}',
-                    'https': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}'
-                }
+            # No proxy configuration - direct connection
         
         # Use randomized headers
         headers = get_random_headers()
-        
-        # Removed artificial delay for maximum speed
         
         if method.upper() == "GET":
             response = session.get(url, headers=headers, timeout=timeout, allow_redirects=True)
@@ -180,13 +123,13 @@ def make_request(url: str, method: str = "GET", timeout: int = 10, use_tor: bool
             "elapsed": elapsed,
             "size": response_size,
             "timestamp": time.time(),
-            "error": None
+            "status_code": 0
         }
     except requests.exceptions.ProxyError as e:
         elapsed = time.time() - start_time
         return {
             "success": False,
-            "error": f"ProxyError: Tor connection failed - {str(e)[:50]}",
+            "error": f"ProxyError: Connection failed - {str(e)[:50]}",
             "elapsed": elapsed,
             "size": 0,
             "timestamp": time.time(),
@@ -233,44 +176,35 @@ def make_request(url: str, method: str = "GET", timeout: int = 10, use_tor: bool
             "status_code": 0
         }
 
-def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: str = "GET", rotate_every: int = 10):
-    """Run load test with specified parameters through Tor"""
+def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: str = "GET"):
+    """Run load test with specified parameters using direct connections"""
     
-    # Ensure Tor is running
-    print("🔍 Checking Tor status...")
-    ensure_tor_running()
-    
-    # Test Tor connection - verify we're anonymous
-    print("🌐 Testing Tor connection and anonymity...")
+    # Test connection and show current IP
+    print("🌐 Testing direct connection...")
     test_session = requests.session()
-    test_session.proxies = {
-        'http': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}',
-        'https': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}'
-    }
     try:
         ip_resp = test_session.get('https://api.ipify.org?format=json', timeout=10)
-        tor_ip = ip_resp.json().get('ip', 'Unknown')
-        print(f"✅ Connected to Tor. Exit IP: {tor_ip}")
+        current_ip = ip_resp.json().get('ip', 'Unknown')
+        print(f"⚠️  WARNING: Using REAL IP: {current_ip}")
+        print(f"🔴 NO ANONYMITY - Direct connection!")
         
-        # Verify we're not leaking real IP
-        print("🔒 Verifying no IP leaks...")
-        dns_test = test_session.get('https://check.torproject.org/api/ip', timeout=10)
-        is_tor = dns_test.json().get('IsTor', False)
-        if is_tor:
-            print(f"✅ Tor verified! Real IP is hidden.\n")
-        else:
-            print(f"⚠️  WARNING: May not be routing through Tor properly!\n")
+        # Get more details
+        try:
+            details = test_session.get('https://ifconfig.co/json', timeout=10).json()
+            print(f"📍 Location: {details.get('city', 'Unknown')}, {details.get('country', 'Unknown')}")
+            print(f"🏢 ISP: {details.get('asn_org', 'Unknown')}\n")
+        except:
+            print()
     except Exception as e:
-        print(f"⚠️  Warning: Could not verify Tor connection: {e}\n")
+        print(f"⚠️  Warning: Could not verify connection: {e}\n")
     
-    print(f"Starting HIGH-INTENSITY anonymous load test:")
+    print(f"Starting HIGH-SPEED direct load test:")
     print(f"  URL: {url}")
     print(f"  Requests: {num_requests:,}")
     print(f"  Concurrency: {concurrency} (parallel threads)")
     print(f"  Method: {method}")
-    print(f"  IP Rotation: Every {rotate_every} requests")
-    print(f"  Anonymity: FULL (Tor routing + randomized headers)")
-    print(f"  Speed: MAXIMUM (no artificial delays)")
+    print(f"  Anonymity: ❌ NONE (Direct connection)")
+    print(f"  Speed: ⚡ MAXIMUM (no proxy overhead)")
     print()
     
     # Enhanced results tracking
@@ -295,22 +229,19 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
     start_time = time.time()
     last_update = start_time
     
-    print(f"💥 Launching {num_requests:,} requests through Tor network...")
+    print(f"💥 Launching {num_requests:,} direct requests...")
     print("="*80)
     
-    # Create persistent sessions for connection pooling
+    # Create persistent sessions for connection pooling (faster than Tor!)
     sessions = []
     for _ in range(min(concurrency, 50)):  # Limit session pool
         s = requests.session()
-        s.proxies = {
-            'http': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}',
-            'https': f'socks5h://{TOR_PROXY_HOST}:{TOR_PROXY_PORT}'
-        }
+        # No proxy configuration - direct connection for maximum speed
         sessions.append(s)
     
     with ThreadPoolExecutor(max_workers=concurrency) as executor:
         futures = [
-            executor.submit(make_request, url, method, 10, True, i, rotate_every, sessions[i % len(sessions)]) 
+            executor.submit(make_request, url, method, 10, i, sessions[i % len(sessions)]) 
             for i in range(num_requests)
         ]
         
@@ -477,10 +408,10 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
             print(f"  ✅ Success rate improving!")
     
     print(f"\n🔒 ANONYMITY STATUS:")
-    print(f"  Tor routing:             ✅ ENABLED")
-    print(f"  Real IP protection:      ✅ ACTIVE")
+    print(f"  Direct connection:       🔴 ACTIVE")
+    print(f"  Real IP protection:      ❌ DISABLED")
     print(f"  Header randomization:    ✅ ACTIVE")
-    print(f"  IP rotation frequency:   Every {rotate_every} requests")
+    print(f"  Traceability:            🔴 HIGH (your real IP is exposed)")
     
     print("\n" + "="*80)
     print(f"Attack completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -488,11 +419,12 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
 
 def main():
     print("=" * 60)
-    print("💥 BOOM - High-Intensity Anonymous Load Tester")
+    print("💥 BOOM - High-Speed Direct Load Tester")
     print("=" * 60)
     print("⚠️  WARNING: For testing YOUR OWN applications only!")
     print("⚠️  Unauthorized testing is ILLEGAL!")
-    print("🔒 Real IP protection: ENABLED (Tor routing)")
+    print("� Real IP protection: DISABLED (Direct connection)")
+    print("⚡ Speed: MAXIMUM (no Tor overhead)")
     print("=" * 60)
     
     # Get URL from user
@@ -510,7 +442,7 @@ def main():
         try:
             num_requests_input = input("📊 Number of requests (1-10,000,000, default 100): ").strip()
             if not num_requests_input:
-                num_requests = 100
+                num_requests = 654321
                 break
             num_requests = int(num_requests_input)
             if 1 <= num_requests <= 10000000:
@@ -539,29 +471,15 @@ def main():
     method_input = input("🔧 HTTP method (GET/POST, default GET): ").strip().upper()
     method = method_input if method_input in ["GET", "POST"] else "GET"
     
-    # Get IP rotation frequency
-    while True:
-        try:
-            rotate_input = input("🔄 Rotate IP every N requests (1-500, default 50): ").strip()
-            if not rotate_input:
-                rotate_every = 50
-                break
-            rotate_every = int(rotate_input)
-            if 1 <= rotate_every <= 500:
-                break
-            else:
-                print("⚠️  Please enter a number between 1 and 500")
-        except ValueError:
-            print("⚠️  Please enter a valid number")
-    
     # Confirm large request counts
-    if num_requests > 1000:
-        print(f"\n{'='*60}")
+    if num_requests > 1000000:
+        print(f"{'='*60}")
         print(f"⚠️  FINAL WARNING ⚠️")
         print(f"{'='*60}")
-        print(f"You are about to send {num_requests:,} requests.")
+        print(f"You are about to send {num_requests:,} requests from your REAL IP.")
         print(f"Only proceed if you OWN the target or have permission.")
         print(f"Unauthorized testing is a CRIME.")
+        print(f"Your IP will be FULLY EXPOSED and easily traced.")
         print(f"{'='*60}")
         response = input(f"Type 'I UNDERSTAND' to continue: ")
         if response != 'I UNDERSTAND':
@@ -569,7 +487,7 @@ def main():
             return
     
     print("\n" + "=" * 60)
-    run_load_test(url, num_requests, concurrency, method, rotate_every)
+    run_load_test(url, num_requests, concurrency, method)
 
 if __name__ == "__main__":
     main()
