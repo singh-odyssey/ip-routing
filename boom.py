@@ -486,90 +486,84 @@ def run_load_test(url: str, num_requests: int, concurrency: int = 10, method: st
     print(f"Attack completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("="*80)
 
+import sys
+import argparse
+
+# ... existing imports ...
+
 def main():
+    parser = argparse.ArgumentParser(
+        description="BOOM - High-Intensity Anonymous Load Tester",
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog="""
+⚠️  WARNING: For testing YOUR OWN applications only!
+⚠️  Unauthorized testing is ILLEGAL!
+🔒 Real IP protection: ENABLED (Tor routing)
+"""
+    )
+    parser.add_argument('url', nargs='?', default=None, help='Target URL')
+    parser.add_argument('-n', '--requests', type=int, default=654321, help='Number of requests (default: 654321)')
+    parser.add_argument('-c', '--concurrency', type=int, default=50, help='Concurrent requests (default: 50)')
+    parser.add_argument('-m', '--method', type=str, default='GET', help='HTTP method (GET/POST, default: GET)')
+    parser.add_argument('-r', '--rotate', type=int, default=50, help='Rotate IP every N requests (default: 50)')
+    parser.add_argument('--no-prompt', action='store_true', help='Skip interactive prompts (used by watchdog script)')
+
+    args = parser.parse_args()
+
+    # If running non-interactively and no URL is provided, exit.
+    if args.no_prompt and not args.url:
+        print("❌ URL must be provided as the first argument when running with --no-prompt.")
+        sys.exit(1)
+
     print("=" * 60)
     print("💥 BOOM - High-Intensity Anonymous Load Tester")
     print("=" * 60)
-    print("⚠️  WARNING: For testing YOUR OWN applications only!")
-    print("⚠️  Unauthorized testing is ILLEGAL!")
-    print("🔒 Real IP protection: ENABLED (Tor routing)")
-    print("=" * 60)
-    
-    # Get URL from user
-    url = input("\n🔗 Enter target URL: ").strip()
-    
-    if not url:
-        print("❌ No URL provided. Exiting.")
-        return
-    
-    if not url.startswith(('http://', 'https://')):
-        url = 'https://' + url
-    
-    # Get number of requests
-    while True:
-        try:
-            num_requests_input = input("📊 Number of requests (1-10,000,000, default 654321): ").strip()
-            if not num_requests_input:
-                num_requests = 654321
-                break
-            num_requests = int(num_requests_input)
-            if 1 <= num_requests <= 10000000:
-                break
-            else:
-                print("⚠️  Please enter a number between 1 and 10,000,000")
-        except ValueError:
-            print("⚠️  Please enter a valid number")
-    
-    # Get concurrency
-    while True:
-        try:
-            concurrency_input = input("⚡ Concurrent requests (1-5000, default 50): ").strip()
-            if not concurrency_input:
-                concurrency = 50
-                break
-            concurrency = int(concurrency_input)
-            if 1 <= concurrency <= 5000:
-                break
-            else:
-                print("⚠️  Please enter a number between 1 and 5000")
-        except ValueError:
-            print("⚠️  Please enter a valid number")
-    
-    # Get HTTP method
-    method_input = input("🔧 HTTP method (GET/POST, default GET): ").strip().upper()
-    method = method_input if method_input in ["GET", "POST"] else "GET"
-    
-    # Get IP rotation frequency
-    while True:
-        try:
-            rotate_input = input("🔄 Rotate IP every N requests (1-500, default 50): ").strip()
-            if not rotate_input:
-                rotate_every = 50
-                break
-            rotate_every = int(rotate_input)
-            if 1 <= rotate_every <= 500:
-                break
-            else:
-                print("⚠️  Please enter a number between 1 and 500")
-        except ValueError:
-            print("⚠️  Please enter a valid number")
-    
-    # Confirm large request counts
-    if num_requests > 10000000:
-        print(f"\n{'='*60}")
-        print(f"⚠️  FINAL WARNING ⚠️")
-        print(f"{'='*60}")
-        print(f"You are about to send {num_requests:,} requests.")
-        print(f"Only proceed if you OWN the target or have permission.")
-        print(f"Unauthorized testing is a CRIME.")
-        print(f"{'='*60}")
-        response = input(f"Type 'I UNDERSTAND' to continue: ")
-        if response != 'I UNDERSTAND':
-            print("Cancelled.")
+
+    # Interactive prompts if not disabled
+    if not args.no_prompt:
+        print("⚠️  WARNING: For testing YOUR OWN applications only!")
+        print("⚠️  Unauthorized testing is ILLEGAL!")
+        print("🔒 Real IP protection: ENABLED (Tor routing)")
+        print("=" * 60)
+        
+        # Only ask for the URL.
+        url = input(f"\n🔗 Enter target URL: ").strip()
+        if not url:
+            print("❌ No URL provided. Exiting.")
             return
+        
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+        
+        # Use default values for everything else.
+        num_requests, concurrency, method, rotate_every = \
+            args.requests, args.concurrency, args.method, args.rotate
+        
+        print(f"� Starting test with default settings for {url}")
+        print(f"   - Requests: {num_requests:,}")
+        print(f"   - Concurrency: {concurrency}")
+
+    else:
+        # Use arguments directly in non-interactive mode
+        url, num_requests, concurrency, method, rotate_every = \
+            args.url, args.requests, args.concurrency, args.method, args.rotate
+        print(f"🤖 Watchdog mode detected. Running non-interactively.")
+
+    # The confirmation step is skipped for a faster start.
     
     print("\n" + "=" * 60)
-    run_load_test(url, num_requests, concurrency, method, rotate_every)
+    
+    # The loop is now in run.sh, so we only run the test once per script execution.
+    try:
+        print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Starting test cycle...")
+        run_load_test(url, num_requests, concurrency, method, rotate_every)
+        print(f"\n[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Test cycle finished.")
+    except KeyboardInterrupt:
+        print("\n🛑 Script interrupted by user (Ctrl+C). Exiting.")
+    except Exception as e:
+        print("\n" + "="*80)
+        print(f"❌ An unexpected error occurred in the main loop: {e}")
+        print("="*80)
 
 if __name__ == "__main__":
     main()
