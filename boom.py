@@ -508,9 +508,9 @@ def main():
     # Get number of requests
     while True:
         try:
-            num_requests_input = input("📊 Number of requests (1-10,000,000, default 100): ").strip()
+            num_requests_input = input("📊 Number of requests (1-10,000,000, default 654321): ").strip()
             if not num_requests_input:
-                num_requests = 100
+                num_requests = 654321
                 break
             num_requests = int(num_requests_input)
             if 1 <= num_requests <= 10000000:
@@ -555,7 +555,7 @@ def main():
             print("⚠️  Please enter a valid number")
     
     # Confirm large request counts
-    if num_requests > 1000:
+    if num_requests > 10000000:
         print(f"\n{'='*60}")
         print(f"⚠️  FINAL WARNING ⚠️")
         print(f"{'='*60}")
