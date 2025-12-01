@@ -547,6 +547,49 @@ def main():
             else:
                 print("Invalid choice. Please enter 1, 2, or 3.")
         
+        # Ask if user wants to spawn multiple terminals
+        while True:
+            spawn_choice = input("\n🚀 Do you want to spawn multiple terminals/instances? (y/n): ").strip().lower()
+            if spawn_choice in ['y', 'yes']:
+                while True:
+                    num_terminals = input("🤖 How many terminals do you want to spawn? (e.g., 5): ").strip()
+                    try:
+                        num_terminals = int(num_terminals)
+                        if num_terminals > 0:
+                            # Launch start_swarm.sh with the collected parameters
+                            print(f"\n🔄 Launching {num_terminals} instances using start_swarm.sh...")
+                            print(f"   URL: {url}")
+                            print(f"   Mode: {mode}")
+                            
+                            # Call start_swarm.sh via subprocess
+                            import os
+                            script_dir = os.path.dirname(os.path.abspath(__file__))
+                            swarm_script = os.path.join(script_dir, "start_swarm.sh")
+                            
+                            # Create a temporary input for the script
+                            mode_map = {'tor': '1', 'proxy': '2', 'direct': '3'}
+                            input_data = f"{url}\n{num_terminals}\n{mode_map[mode]}\n"
+                            
+                            result = subprocess.run(['bash', swarm_script], 
+                                                  input=input_data, 
+                                                  text=True,
+                                                  cwd=script_dir)
+                            
+                            if result.returncode == 0:
+                                print("\n✅ Swarm launched successfully!")
+                            else:
+                                print("\n❌ Failed to launch swarm.")
+                            return
+                        else:
+                            print("❌ Please enter a positive number.")
+                    except ValueError:
+                        print("❌ Invalid input. Please enter a number.")
+                break
+            elif spawn_choice in ['n', 'no']:
+                break
+            else:
+                print("Invalid choice. Please enter 'y' or 'n'.")
+        
         num_requests, concurrency, method = args.requests, args.concurrency, args.method
         print(f"\n🚀 Starting test with default settings:")
         print(f"   - Requests: {num_requests:,}")
