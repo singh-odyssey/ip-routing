@@ -1,79 +1,86 @@
-# Anonymous Load Testing Toolkit
+# IP Routing & Engagement Toolkit
 
-This project contains a set of scripts to run a high-intensity, Tor-routed load testing application. It is designed for resilience and can be run as a single instance or as a swarm of multiple bots.
+A comprehensive toolkit for Tor-routed network testing, featuring both high-intensity load testing and realistic browser simulation.
 
 **⚠️ WARNING: This tool is for testing YOUR OWN applications only. Unauthorized use against websites you do not own is illegal and can have severe consequences.**
 
 ---
 
-## 1. Setup (One-Time Only)
+## 🛠️ Installation
 
-Before running the scripts for the first time, you need to make them executable.
+Run the setup script to install all dependencies (Tor, Firefox, Geckodriver, Python requirements) and configure the environment.
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+---
+
+## 🚀 Mode 1: High-Intensity Load Testing
+*Best for: Stress testing, load generation, checking server resilience.*
+
+This mode uses lightweight HTTP requests to generate significant traffic. **Warning:** `boom.py` is capable of generating traffic levels comparable to a Distributed Denial of Service (DDoS) attack.
+
+### 1. Basic Usage (`boom.py`)
+Run the load tester directly in interactive mode. This is the easiest way to start a single test.
+
+```bash
+python3 boom.py
+```
+*Prompts for target URL, anonymity mode (Tor/Proxy/Direct), and other settings.*
+
+### 2. Persistent Mode (`run.sh`)
+Runs the bot with a **watchdog** that automatically restarts it if it crashes or stops. Ideal for long-running tests.
 
 ```bash
 chmod +x run.sh
-chmod +x start_swarm.sh
-```
-
-You may also need to install `tmux` if it's not already on your system. This is required for the swarm script.
-```bash
-sudo apt-get update && sudo apt-get install -y tmux
-```
-
----
-
-## 2. Single Bot Mode (`run.sh`)
-
-This is the simplest way to run a single, persistent bot. The `run.sh` script acts as a watchdog, ensuring that the Python bot (`boom.py`) restarts automatically if it ever stops.
-
-### How to Run
-
-```bash
 ./run.sh
 ```
-The script will then prompt you to enter the target URL. Once provided, the bot will start with default settings and run continuously.
+*Prompts for target URL and runs continuously.*
 
-### How to Stop
+### 3. Swarm Mode (`start_swarm.sh`)
+Launches **multiple bot instances** in the background using `tmux`. Each instance runs in its own watchdog loop.
 
-Press `Ctrl+C` in the terminal where `run.sh` is running.
+```bash
+chmod +x start_swarm.sh
+./start_swarm.sh
+```
+*Prompts for target URL, number of bots, and anonymity mode.*
+
+**Managing the Swarm:**
+- **View bots:** `tmux attach -t bot_swarm`
+- **Detach:** `Ctrl+B`, then `D`
+- **Stop all:** `tmux kill-session -t bot_swarm`
 
 ---
 
-## 3. Swarm Mode (`start_swarm.sh`)
+## 🌐 Mode 2: Browser Simulation (`tor_bot.py`)
+*Best for: Engagement simulation, testing fingerprinting defenses, realistic user behavior.*
 
-This is the recommended way to generate significant load. The `start_swarm.sh` script launches and manages multiple bot instances in the background using `tmux`. Each bot is managed by its own watchdog (`run.sh`), making the entire swarm highly resilient.
+This mode uses **Selenium with Firefox** to simulate real user interactions. It features:
+- **Advanced Fingerprinting**: Randomizes User-Agent, Screen Resolution, and more.
+- **Tor IP Rotation**: Requests a new Tor circuit for every visit.
+- **Human Behavior**: Simulates mouse movements, scrolling, and random delays.
 
-### How to Run
+### Usage
 
 ```bash
-./start_swarm.sh
+python3 tor_bot.py
 ```
-The script will ask for:
-1.  The target URL.
-2.  How many bots you want to launch.
 
-After you provide the inputs, the script will create a background `tmux` session and launch all the bots. You can safely close your terminal, and the swarm will continue to run.
+The script will interactively ask for:
+1.  **Target URL**: The website to visit.
+2.  **Number of Visits**: How many unique sessions to generate.
 
-### How to Manage and Monitor the Swarm
+---
 
-You can manage the swarm using `tmux` commands from any terminal.
+## 📂 File Structure
 
-*   **Attach to the Swarm (to see the bots in action):**
-    ```bash
-    tmux attach -t bot_swarm
-    ```
-
-*   **Navigate Between Bots (while attached):**
-    - Press `Ctrl+B`, then `N` to switch to the **N**ext bot window.
-    - Press `Ctrl+B`, then `P` to switch to the **P**revious bot window.
-    - Press `Ctrl+B`, then `[Window Number]` (e.g., `Ctrl+B`, `3`) to jump directly to a bot.
-
-*   **Detach from the Swarm (leave it running in the background):**
-    - Press `Ctrl+B`, then `D`.
-
-*   **Stop the Entire Swarm:**
-    This command will instantly kill all running bots and clean up the session.
-    ```bash
-    tmux kill-session -t bot_swarm
-    ```
+- **`boom.py`**: Core logic for the HTTP load testing bot.
+- **`tor_bot.py`**: Core logic for the Selenium browser bot.
+- **`run.sh`**: Watchdog script for `boom.py`.
+- **`start_swarm.sh`**: Swarm manager for multiple `run.sh` instances.
+- **`setup.sh`**: Automated installation and configuration script.
+- **`dashboard.py`**: (Optional) Visualization tool for bot statistics.
 
