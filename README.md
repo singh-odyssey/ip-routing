@@ -1,9 +1,10 @@
-# � Microsoft Student Ambassador - Unique Viewer Bot
+# 🎓 Microsoft Student Ambassador - Unique Viewer Bot
 
-Advanced bot system for generating unique viewers on Microsoft Learn and Azure URLs with sophisticated Indian IP simulation and device fingerprinting.
+Advanced bot system for generating unique viewers on Microsoft Learn and Azure URLs with sophisticated IP routing capabilities, including **Tor network integration** for maximum anonymity.
 
 ## 🚀 Quick Start
 
+### Option 1: Microsoft Ambassador Bot (Indian IP Simulation)
 ```bash
 git clone https://github.com/singh-odyssey/ip-routing.git
 cd ip-routing
@@ -14,11 +15,19 @@ python3 microsoft_ambassador_bot.py
 ```
 
 When prompted:
-1. Enter your Microsoft URL (e.g., `https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135`)
+1. Enter your Microsoft URL (e.g., `https://learn.microsoft.com/copilot?wt.mc_id=studentamb_491193`)
 2. Specify number of views (or type 'unlimited' for continuous operation)
-3. Bot will automatically add/update the ambassador tracking ID (`wt.mc_id=studentamb_465135`)
-
+3. Bot will automatically add/update the ambassador tracking ID (`wt.mc_id=studentamb_491193`)
 ## ✨ Key Features
+
+### 🧅 Tor Network Integration (NEW!)
+- **Fresh Tor IP for every request** - Complete anonymity
+- **Automatic Tor management** - Auto-starts Tor if not running
+- **IP verification** - Confirms new IP before each request
+- **Retry mechanism** - 3 attempts with intelligent fallback
+- **Multiple IP services** - Redundant IP verification (ipify, icanhazip, ifconfig.me)
+- **Real-time IP tracking** - Displays current Tor exit node
+- **Unique IPs guarantee** - Ensures different IP per request
 
 ### 🇮🇳 Comprehensive Indian IP Database
 - **200+ verified IP addresses** covering all of India
@@ -28,11 +37,27 @@ When prompted:
 
 ### 🎯 Microsoft-Optimized
 - **Automatic ambassador ID injection** (wt.mc_id parameter)
+- **Updated ambassador ID**: `studentamb_491193`
 - **Microsoft domain validation** (learn.microsoft.com, azure.microsoft.com, etc.)
 - **Edge browser preference** for authentic Microsoft traffic
 - **Ambassador tracking verification** in logs
 
 ### 🛡️ Advanced Anti-Detection
+- **42+ device characteristics** per session
+- **Unique browser fingerprints** (WebGL, Canvas, Audio Context)
+- **ISP-specific behavior** (Jio, Airtel, Vi, BSNL, ACT, etc.)
+- **Realistic timing** (3-7 second intervals with retry)
+- **Regional language preferences** (15+ Indian languages)
+- **Human-like scrolling and interaction patterns** (4-10s reading time)
+- **Mobile vs Desktop detection** - Platform-specific headers
+
+### 📊 Smart Session Management
+- **Zero duplicate sessions** within recent history
+- **Automatic IP rotation** across cities and ISPs
+- **Session diversity tracking** (IPs, cities, ISPs)
+- **Detailed logging** of all view attempts
+- **Success rate monitoring** - Real-time statistics
+- **Unique IP tracking** - Counts distinct IPs used
 - **42+ device characteristics** per session
 - **Unique browser fingerprints** (WebGL, Canvas, Audio Context)
 - **ISP-specific behavior** (Jio, Airtel, Vi, BSNL, ACT, etc.)
@@ -54,25 +79,37 @@ Target: https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135
 Features: 200+ Indian IPs, Microsoft-Optimized, Advanced Fingerprinting
 
 🚀 GENERATING UNIQUE VIEW #1
-⏰ Time: 2024-11-04 14:30:45 IST
+## 📁 Project Structure
 
-🇮🇳 NEW UNIQUE INDIAN VIEWER
-📍 Location: New Delhi, Delhi  
-📡 ISP: Jio 5G
-🆔 Session: a7b9c3e2f8d1
-🌐 Simulated IP: 49.37.189.123
-🔧 User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Edg/121.0.0.0
+```
+📁 ip-routing/
+├── 🎯 microsoft_ambassador_bot.py      # Main Microsoft Learn viewer bot (Indian IPs)
+├── 🧅 tor_route_requests.py            # Tor network routing bot (Maximum anonymity)
+├── 🔧 smart_indian_simulator.py        # IP & fingerprint simulation engine
+├── 🗄️ manual_indian_ips.json          # 200+ verified Indian IP addresses
+├── 📦 requirements.txt                 # Python dependencies
+└── 📖 README.md                        # Project documentation
+```
 
-🔄 Loading Microsoft page...
-✅ Microsoft page loaded successfully
-� Simulating page reading: 5.32s
-📜 Simulating 4 scroll events
-🌐 Getting IP address...
-📍 Real IP detected: 157.43.87.142
-🔍 Generating device fingerprint...
-🆔 Device ID: 3f8e9d2a1b4c6e7f...
-✅ AMBASSADOR TRACKING SUCCESSFUL: studentamb_465135
-✅ PAGE VISIT SUCCESSFUL - Microsoft Learn view registered
+### File Descriptions
+
+**`microsoft_ambassador_bot.py`** - Main bot application
+- Interactive URL input with validation
+- Automatic ambassador ID (`wt.mc_id`) injection (updated to `studentamb_491193`)
+- Microsoft domain detection
+- Unique viewer generation with full session simulation
+- Real-time statistics and progress tracking
+
+**`tor_route_requests.py`** - Tor network routing bot (NEW!)
+- Routes all requests through Tor network
+- Fresh IP address for every single request
+- Automatic Tor process management
+- IP verification and uniqueness tracking
+- Retry mechanism with intelligent fallback
+- Multiple IP check services for redundancy
+- Enhanced browser fingerprinting
+- Mobile vs Desktop detection
+- Realistic user behavior simulation (4-10s reading time)ew registered
 
 ✅ UNIQUE VIEW GENERATED SUCCESSFULLY!
 📈 Overall Stats: 1 successful views, 0 failed (100% success)
@@ -242,27 +279,49 @@ Features: 200+ Indian IPs, Microsoft-Optimized, Advanced Fingerprinting
 - **View counts:** Unlimited mode recommended for continuous engagement
 
 ### 📊 **Monitoring & Statistics**
-The bot provides real-time statistics:
-- **Success rate:** Percentage of successful views
-- **Session diversity:** Unique IPs, cities, ISPs used
-- **Geographic distribution:** Cities and regions covered
-- **ISP variety:** Different network providers simulated
-
-### 🛑 **Graceful Shutdown**
-- Press `Ctrl+C` to stop the bot safely
-- Final statistics displayed on exit
-- Session diversity summary provided
-
-## 🔧 Installation & Requirements
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/singh-odyssey/ip-routing.git
+### 📦 **Dependencies**
+```
+requests>=2.31.0         # HTTP requests and session management
+schedule>=1.2.0          # Task scheduling
+PySocks>=1.7.0          # SOCKS proxy support (required for Tor)
+pytz>=2023.3            # Timezone handling (IST)
+urllib3>=2.0.0          # URL handling
+selenium>=4.15.0        # Browser automation (optional)
+webdriver-manager>=4.0.0 # WebDriver management (optional)
+flask>=2.3.0            # Web framework (future web UI)
+flask-socketio>=5.3.0   # WebSocket support (future web UI)
+python-socketio>=5.8.0  # Socket.IO client
+gunicorn>=21.2.0        # Production WSGI server
+gevent>=23.9.0          # Async networking
+gevent-websocket>=0.10.1 # WebSocket for gevent
+stem>=1.8.0             # Tor controller library (NEW - for Tor bot)
+``` clone https://github.com/singh-odyssey/ip-routing.git
 cd ip-routing
+### 🐍 **Requirements**
 
-# 2. Install dependencies
-pip install -r requirements.txt
+**For Microsoft Ambassador Bot:**
+- Python 3.7 or higher
+- Stable internet connection
+- Terminal/Command line access
 
+**For Tor Route Requests Bot:**
+- Python 3.7 or higher
+- **Tor installed** (the bot can auto-start it)
+- Stable internet connection
+- Terminal/Command line access
+
+**Installing Tor:**
+```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install tor
+
+# macOS
+brew install tor
+
+# Windows
+# Download from https://www.torproject.org/download/
+```
 # 3. Run the bot
 python3 microsoft_ambassador_bot.py
 ```
@@ -288,20 +347,20 @@ gevent-websocket>=0.10.1 # WebSocket for gevent
 - Python 3.7 or higher
 - Stable internet connection
 - Terminal/Command line access
+### Supported Microsoft URLs
+```
+✅ https://learn.microsoft.com/copilot?wt.mc_id=studentamb_491193
+✅ https://azure.microsoft.com?wt.mc_id=studentamb_491193
+✅ https://www.microsoft.com/Startups?wt.mc_id=studentamb_491193
+✅ https://www.microsoft.com/events?wt.mc_id=studentamb_491193
+✅ https://docs.microsoft.com/...?wt.mc_id=studentamb_491193
+```
 
-## 🚀 How It Works
-
-### Step-by-Step Process
-
-1. **URL Input & Validation**
-   - User enters Microsoft URL
-   - Bot validates URL format and domain
-   - Automatically adds/updates `wt.mc_id=studentamb_465135` parameter
-
-2. **Session Creation**
-   - Selects IP from database (70% NCR probability)
-   - Generates unique device fingerprint (42+ characteristics)
-   - Creates ISP-appropriate headers and behavior
+### Ambassador Tracking
+- **Parameter:** `wt.mc_id=studentamb_491193` (Updated!)
+- **Auto-injection:** Bot adds if missing
+- **Auto-update:** Bot updates if different ID present
+- **Verification:** Logs confirm successful tracking
 
 3. **Page Interaction**
    - Loads Microsoft Learn page
@@ -312,54 +371,7 @@ gevent-websocket>=0.10.1 # WebSocket for gevent
 4. **Tracking Verification**
    - Confirms ambassador ID in URL
    - Logs successful tracking registration
-   - Reports view completion
-
-5. **Next View Preparation**
-   - Waits 2-5 seconds (random)
-   - Ensures no session duplication
-   - Rotates to new IP/fingerprint
-
-### Architecture Components
-
-**Smart IP Simulator (`smart_indian_simulator.py`)**
-- IP database management (200+ IPs)
-- Session profile generation
-- Fingerprint creation
-- Uniqueness tracking
-
-**Microsoft Ambassador Bot (`microsoft_ambassador_bot.py`)**
-- URL validation and ambassador ID injection
-- Enhanced session creation with Microsoft optimization
-- Page interaction simulation
-- Statistics tracking and reporting
-
-## 🎓 Microsoft Learn Integration
-
-### Supported Microsoft URLs
-```
-✅ https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135
-✅ https://azure.microsoft.com?wt.mc_id=studentamb_465135
-✅ https://www.microsoft.com/Startups?wt.mc_id=studentamb_465135
-✅ https://www.microsoft.com/events?wt.mc_id=studentamb_465135
-✅ https://docs.microsoft.com/...?wt.mc_id=studentamb_465135
-```
-
-### Ambassador Tracking
-- **Parameter:** `wt.mc_id=studentamb_465135`
-- **Auto-injection:** Bot adds if missing
-- **Auto-update:** Bot updates if different ID present
-- **Verification:** Logs confirm successful tracking
-
-### Browser Optimization
-Bot prefers Edge browser user agents for Microsoft sites:
-- Windows Edge (latest versions)
-- Mac Edge
-- Mobile Edge (Android)
-- Chrome (fallback for diversity)
-
-## 📈 Statistics & Reporting
-
-### Real-time Metrics
+### Real-time Metrics (Microsoft Ambassador Bot)
 ```
 📈 Overall Stats: 25 successful views, 0 failed (100% success)
 🔄 Session Diversity: 23 unique IPs, 18 cities, 7 ISPs
@@ -375,8 +387,8 @@ Bot prefers Edge browser user agents for Microsoft sites:
    - ISPs: Jio, Airtel, Vi, BSNL, ACT, Excitel, Azure
 ```
 
-## 🤝 Troubleshooting
-
+### Tor Bot Statistics
+```
 ### Common Issues
 
 **Issue:** Import errors or missing modules
@@ -400,8 +412,69 @@ pip install -r requirements.txt --upgrade
 **Issue:** Ambassador ID not detected in logs
 ```bash
 # Solution: Bot automatically adds it. Check the URL in logs
-# Should see: "✅ AMBASSADOR TRACKING SUCCESSFUL: studentamb_465135"
+# Should see: "✅ AMBASSADOR TRACKING SUCCESSFUL: studentamb_491193"
 ```
+
+**Issue (Tor Bot):** "Tor executable not found"
+```bash
+# Solution: Install Tor
+sudo apt install tor  # Ubuntu/Debian
+brew install tor      # macOS
+```
+
+**Issue (Tor Bot):** "Failed to renew Tor IP"
+```bash
+# Solution: The bot auto-starts Tor if needed, but you can manually start:
+tor  # Run in separate terminal
+# Or let the script handle it automatically
+```
+
+**Issue (Tor Bot):** "IP didn't change" warning
+```bash
+# Solution: This is normal - bot automatically retries with 5s delay
+# Tor may reuse exit nodes; the retry mechanism handles this
+```ttps://www.microsoft.com/Startups?wt.mc_id=studentamb_465135
+✅ https://www.microsoft.com/events?wt.mc_id=studentamb_465135
+✅ https://docs.microsoft.com/...?wt.mc_id=studentamb_465135
+```
+
+### Ambassador Tracking
+- **Parameter:** `wt.mc_id=studentamb_465135`
+- **Auto-injection:** Bot adds if missing
+- **Auto-update:** Bot updates if different ID present
+- **Verification:** Logs confirm successful tracking
+
+### Browser Optimization
+Bot prefers Edge browser user agents for Microsoft sites:
+- Windows Edge (latest versions)
+| Feature | Description | Status |
+|---------|-------------|--------|
+| 🧅 **Tor Network** | **Fresh IP per request via Tor** | ✅ **NEW** |
+| 🔄 **Auto Tor Manager** | **Auto-starts Tor process** | ✅ **NEW** |
+| 🌐 **IP Verification** | **Multi-service IP confirmation** | ✅ **NEW** |
+| 🔁 **Retry Logic** | **3 attempts with fallback** | ✅ **NEW** |
+| 🇮🇳 Indian IP Database | 200+ verified IPs across India | ✅ Active |
+| 🎯 Microsoft Optimization | Auto ambassador ID injection (491193) | ✅ Updated |
+| 🛡️ Anti-Detection | 42+ unique fingerprint characteristics | ✅ Active |
+| 📍 NCR Focus | 70% Delhi NCR IP selection | ✅ Active |
+| ⏱️ Realistic Timing | 3-7 second human-like intervals | ✅ Enhanced |
+| 🔄 Session Uniqueness | Zero duplicate sessions | ✅ Active |
+| 📊 Real-time Stats | Success rate & diversity tracking | ✅ Enhanced |
+| 🌐 ISP Simulation | 10+ Indian ISP behaviors | ✅ Active |
+| 🗣️ Language Support | 15+ Indian languages | ✅ Active |
+| ☁️ Cloud IPs | AWS, Azure, GCP support | ✅ Active |
+| 📱 Mobile Detection | Platform-specific headers | ✅ Enhanced |
+### Session Diversity Report (Every 5 Views)
+```
+🔄 SESSION DIVERSITY ACHIEVED:
+   - Unique IP addresses used: 23
+   - Different cities covered: 18
+   - Different ISPs simulated: 7
+   - Cities: New Delhi, Mumbai, Bengaluru, Gurgaon, Noida, ...
+   - ISPs: Jio, Airtel, Vi, BSNL, ACT, Excitel, Azure
+```
+
+
 
 ### Getting Help
 1. Check console logs for detailed error messages

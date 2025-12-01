@@ -55,7 +55,7 @@ def is_microsoft_url(url):
     domain = parsed.netloc.lower()
     return any(ms_domain in domain for ms_domain in microsoft_domains)
 
-def ensure_ambassador_id(url, ambassador_id='studentamb_465135'):
+def ensure_ambassador_id(url, ambassador_id='studentamb_491193'):
     """Ensure the URL contains the Microsoft Student Ambassador tracking ID"""
     parsed = urlparse(url)
     query_params = parse_qs(parsed.query)
@@ -103,7 +103,7 @@ def get_user_url():
                     return url
         else:
             print("❌ Invalid URL format. Please enter a valid URL.")
-            print("💡 Example: https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135")
+            print("💡 Example: https://learn.microsoft.com/copilot?wt.mc_id=studentamb_491193")
 
 def get_user_views():
     """Get target number of views from user input"""
@@ -202,8 +202,8 @@ class MicrosoftAmbassadorBot:
         print(f"🎯 Target: {self.target_url}")
         
         # Check if ambassador ID is present
-        if 'wt.mc_id=studentamb_465135' in self.target_url:
-            print(f"✅ Ambassador tracking ID detected: studentamb_465135")
+        if 'wt.mc_id=studentamb_491193' in self.target_url:
+            print(f"✅ Ambassador tracking ID detected: studentamb_491193")
     
     def create_enhanced_indian_session(self):
         """Create enhanced session with better Indian characteristics"""
@@ -480,10 +480,10 @@ def main():
     print("   • Complete anti-detection")
     print()
     print("📝 Supported Microsoft URLs:")
-    print("   • https://learn.microsoft.com/copilot?wt.mc_id=studentamb_465135")
-    print("   • https://azure.microsoft.com?wt.mc_id=studentamb_465135")
-    print("   • https://www.microsoft.com/Startups?wt.mc_id=studentamb_465135")
-    print("   • https://www.microsoft.com/events?wt.mc_id=studentamb_465135")
+    print("   • https://learn.microsoft.com/copilot?wt.mc_id=studentamb_491193")
+    print("   • https://azure.microsoft.com?wt.mc_id=studentamb_491193")
+    print("   • https://www.microsoft.com/Startups?wt.mc_id=studentamb_491193")
+    print("   • https://www.microsoft.com/events?wt.mc_id=studentamb_491193")
     print()
     
     # Get target URL from user
